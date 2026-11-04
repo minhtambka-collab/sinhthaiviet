@@ -48,10 +48,14 @@ def cat_nvl(n):
 
 
 # ---------- dữ liệu sản phẩm ----------
+NEWIMG = {20:103,64:102,65:107,67:104,12:109,13:111,69:105,70:108,71:108,72:110,48:112,53:113,46:114,47:116,14:115,
+          44:131,45:132,15:118,56:118,19:130,37:124,41:119,2:120,10:120,8:121,11:121,4:122,7:125,66:125,36:123,43:123,
+          55:126,38:127,3:127,40:128,54:128,42:129,34:129}
 BT = []
 for r in DATA["bt"]:
+    _n = NEWIMG.get(int(r["stt"])) if r["name"] != "Khô mực cốt dừa 100g" else None
     BT.append(dict(name=r["name"], unit=r["unit"], price=money(r["retail"]), raw=re.sub(r"\D", "", r["retail"]),
-                   img=("img/sp/" + r["img"]) if r["img"] else None, cat=cat_bt(r["name"])))
+                   img=(f"img/anh/b{_n}.jpg" if _n else (("img/sp/" + r["img"]) if r["img"] else None)), cat=cat_bt(r["name"])))
 NVL = []
 for r in DATA["nvl"]:
     NVL.append(dict(name=r["name"], unit=r["unit"], price=money(r["retail"]), raw=re.sub(r"\D", "", r["retail"]),
@@ -167,8 +171,8 @@ def itemlist(items, name, path):
 
 # ---------- TRANG CHỦ ----------
 def home():
-    feats = [("img/anh/b06.jpg", "Sate bò ngũ vị"), ("img/anh/b04.jpg", "Gà sốt me cay"),
-             ("img/anh/b07.jpg", "Phô mai chà bông"), ("img/anh/b05.jpg", "Lá bò lục vị")]
+    feats = [("img/anh/b102.jpg", "Sate bò ngũ vị"), ("img/anh/b107.jpg", "Gà sốt me cay"),
+             ("img/anh/b105.jpg", "Phô mai chà bông"), ("img/anh/b108.jpg", "Lá bò lục vị")]
     fcards = "".join(f'<figure>{img(s, "Bánh tráng trộn " + t + " Sinh Thái Việt", "", 500, 500)}<figcaption>{t}</figcaption></figure>' for s, t in feats)
     body = f"""
 <section class="hero"><div class="wrap hero-in"><div>
@@ -211,7 +215,7 @@ def story():
         return (f'<article class="step"><span class="num">{n}</span><img src="../img/anh/{im}.webp" alt="{e(alt)}" width="520" height="520" loading="lazy" decoding="async">'
                 f'<div><h3>{t}</h3><p>{p}</p><a class="btn sm" href="{href}">Xem nhóm sản phẩm</a></div></article>')
     steps = "".join([
-        step(1, "Mở túi là ăn: bánh tráng trộn sẵn", "Dành cho người bận rộn. Sợi bánh tráng đã tẩm vị, trộn sẵn khô bò, khô gà, tóp mỡ, hành phi, đậu phộng. Chọn vị sate bò ngũ vị, gà sốt me cay, phô mai gà cay, lá bò lục vị, hải sản...", "b06", "Bánh tráng trộn sate bò ngũ vị Sinh Thái Việt", "../san-pham/banh-trang-tron/"),
+        step(1, "Mở túi là ăn: bánh tráng trộn sẵn", "Dành cho người bận rộn. Sợi bánh tráng đã tẩm vị, trộn sẵn khô bò, khô gà, tóp mỡ, hành phi, đậu phộng. Chọn vị sate bò ngũ vị, gà sốt me cay, phô mai gà cay, lá bò lục vị, hải sản...", "b102", "Bánh tráng trộn sate bò ngũ vị Sinh Thái Việt", "../san-pham/banh-trang-tron/"),
         step(2, "Tự tay trộn: set vỏ, sốt và topping", "Dành cho người thích chủ động. Mỗi set có vỏ bánh tráng, túi sốt bơ trứng gà, sốt me hoặc sốt tắc và các hũ topping riêng. Bạn trộn đến đúng vị mình thích.", "b70", "Combo bánh tráng me bơ siêu toppings", "../san-pham/set-an-vat/"),
         step(3, "Nướng và cuộn: món ăn vặt đường phố tại nhà", "Bánh tráng nướng vỏ vàng giòn kèm khay topping, hoặc bánh tráng cuộn bơ đầy đủ nhân. Đóng hút chân không, sẵn sàng cho buổi tụ họp.", "b92", "Bánh tráng nướng set topping khay", "../san-pham/set-an-vat/"),
         step(4, "Sốt &amp; topping: linh hồn của món ăn", "Sốt me, sốt tắc, ớt rim, bơ trứng gà, tóp mỡ rim mắm hành, muối tép hành phi. Dùng kèm bánh tráng hoặc cho quán ăn vặt.", "b81", "Sốt me Sinh Thái Việt", "../san-pham/sot-topping-gia-vi/")])
@@ -246,7 +250,7 @@ def story():
 """
     write("cau-chuyen", page("cau-chuyen/", "Câu chuyện thương hiệu Sinh Thái Việt | Hợp tác xã Đầu tư Thái Nguyên",
                              "Câu chuyện Sinh Thái Việt: từ hợp tác xã Thái Nguyên đến bánh tráng trộn ISO 22000:2018. Chọn cách ăn: trộn sẵn, tự trộn, nướng cuộn, sốt và topping.",
-                             body, 1, "img/anh/b06.jpg", crumbs=[("Trang chủ", ""), ("Câu chuyện", "cau-chuyen/")]))
+                             body, 1, "img/anh/b102.jpg", crumbs=[("Trang chủ", ""), ("Câu chuyện", "cau-chuyen/")]))
 
 
 def products():
@@ -256,7 +260,7 @@ def products():
 <p class="lead">{len(BT)} sản phẩm: bánh tráng trộn, phơi sương, dẻo tôm, cơm cháy, khô, sốt và set ăn vặt. Giá hiển thị là giá bán lẻ khuyến nghị.</p></div></section>
 <section class="sec"><div class="wrap">{catalog(BT, "../", "bt")}</div></section>
 <section class="sec"><div class="wrap"><h2>Chọn theo cách bạn muốn ăn</h2><div class="cols3 linkbox">
-<a class="box" href="banh-trang-tron/"><img src="../img/anh/b06.webp" alt="Bánh tráng trộn sate bò ngũ vị" width="300" height="300" loading="lazy"><h3>Ăn liền, mở túi là có</h3><p>Bánh tráng trộn sẵn topping đóng túi đứng</p></a>
+<a class="box" href="banh-trang-tron/"><img src="../img/anh/b102.webp" alt="Bánh tráng trộn sate bò ngũ vị" width="300" height="300" loading="lazy"><h3>Ăn liền, mở túi là có</h3><p>Bánh tráng trộn sẵn topping đóng túi đứng</p></a>
 <a class="box" href="set-an-vat/"><img src="../img/anh/b70.webp" alt="Combo bánh tráng me bơ siêu toppings" width="300" height="300" loading="lazy"><h3>Tự trộn tại nhà</h3><p>Set vỏ, sốt và topping rời để tự tay trộn</p></a>
 <a class="box" href="sot-topping-gia-vi/"><img src="../img/anh/b81.webp" alt="Sốt me Sinh Thái Việt" width="300" height="300" loading="lazy"><h3>Sốt &amp; topping</h3><p>Sốt me, sốt tắc, ớt rim, bơ trứng gà, tóp mỡ</p></a></div></div></section>
 <section class="sec alt"><div class="wrap"><h2>Thư viện ảnh sản phẩm</h2><div class="gallery">
@@ -486,26 +490,29 @@ def wp(src):
 
 
 # =========== ẢNH SẢN PHẨM THEO NHÓM ===========
-G_TRON = [(6,"Bánh tráng trộn sate bò ngũ vị"),(4,"Bánh tráng trộn gà sốt me cay"),(3,"Bánh tráng trộn phô mai gà cay"),
- (5,"Bánh tráng trộn lá bò lục vị"),(2,"Bánh tráng trộn tỏi thơm bò cao cấp"),(8,"Bánh tráng trộn hải sản cao cấp"),
- (7,"Bánh tráng trộn phô mai chà bông"),(11,"Bánh tráng trộn mát cha chà bông"),(88,"Bánh tráng bò bò lục vị"),
- (87,"Bánh tráng trộn phô mai gà quay"),(51,"Bánh tráng trộn sate me khô mực"),(25,"Bánh tráng trộn thập cẩm cao cấp"),
- (27,"Bánh tráng vương tôm đặc biệt"),(28,"Bánh tráng lá tỏi bò"),(29,"Bánh tráng rong biển cháy tỏi"),
- (34,"Bánh tráng phô mai lá dứa"),(35,"Bánh tráng cuộn phô mai sốt bơ"),(37,"Bánh tráng lắc vị tomyum"),
- (38,"Bánh tráng lắc vị trứng muối"),(40,"Bánh tráng lắc vị kimchi"),(44,"Bánh tráng cuộn dứa thập cẩm"),
+G_TRON = [(102,"Bánh tráng trộn saté bò ngũ vị cao cấp"),(107,"Bánh tráng trộn gà sốt me cay"),(109,"Bánh tráng trộn phô mai gà cay"),
+ (108,"Bánh tráng trộn lá bò lục vị"),(110,"Bánh tráng trộn tỏi thơm bò cay"),(104,"Bánh tráng trộn hải sản cao cấp"),
+ (105,"Bánh tráng trộn phô mai chà bông"),(106,"Bánh tráng trộn mật chà chà bông"),(111,"Bánh tráng trộn saté me khô mực"),
+ (132,"Bánh tráng trộn thập cẩm cao cấp"),(131,"Bánh tráng trộn túi zip 200g"),(112,"Bánh tráng xì ke vị đặc biệt"),
+ (113,"Bánh tráng Luxury hút chân không"),(114,"Bánh tráng trộn hút chân không"),(116,"Bánh tráng trộn Vip"),
+ (115,"Bánh tráng phô mai cuộn mực cay"),(117,"Bánh tráng matcha lá dứa phô mai"),(103,"Bánh tráng phơi sương mini"),
+ (130,"Bánh tráng phơi sương muối tép hành phi"),
+ (88,"Bánh tráng bò bò lục vị"),(87,"Bánh tráng trộn phô mai gà quay"),(27,"Bánh tráng vương tôm đặc biệt"),(28,"Bánh tráng lá tỏi bò"),
+ (29,"Bánh tráng rong biển cháy tỏi"),(34,"Bánh tráng phô mai lá dứa"),(35,"Bánh tráng cuộn phô mai sốt bơ"),
+ (37,"Bánh tráng lắc vị tomyum"),(38,"Bánh tráng lắc vị trứng muối"),(40,"Bánh tráng lắc vị kimchi"),(44,"Bánh tráng cuộn dứa thập cẩm"),
  (48,"Bánh tráng sợi nguyên sate bò"),(49,"Bánh tráng phô mai tôm"),(101,"Bánh tráng sọt phô mai sốt mai")]
-G_SET = [(70,"Combo bánh tráng me bơ siêu toppings"),(74,"Combo bánh tráng tắc bơ siêu toppings"),(57,"Bánh tráng bò ngũ vị set sốt và topping"),
- (58,"Bánh tráng me lục vị"),(71,"Bánh tráng bơ lục vị"),(63,"Bánh tráng bơ me"),(80,"Bánh tráng mix sốt bơ tam vị"),
- (53,"Bánh tráng sốt chua ngọt"),(100,"Set bánh tráng sốt chua ngọt đủ topping"),(99,"Bánh tráng khô mực cốt dừa"),
- (91,"Bánh tráng khô mực ớt dừa túi bạc"),(83,"Bánh tráng phơi sương best seller mix sốt muối tép hành phi"),
- (82,"Bánh tráng phơi sương bơ béo muối tép"),(84,"Bánh tráng phơi sương mini"),(85,"Bánh tráng phơi sương best seller mix sốt"),
+G_SET = [(118,"Bánh tráng phơi sương best seller mix sốt"),(119,"Bánh tráng tóp mỡ hành phi"),(120,"Set siêu vip topping lọ"),
+ (121,"Bánh tráng khô mực cốt dừa"),(122,"Set dẻo tôm bơ chà bông"),(123,"Bánh tráng bơ lục vị"),(124,"Bánh tráng phơi sương tóp mỡ"),
+ (125,"Bánh tráng sốt chấm chua ngọt"),(126,"Bánh tráng me lục vị"),(127,"Bánh tráng bơ béo trứng muối"),
+ (128,"Bánh tráng bơ ngũ vị"),(129,"Bánh tráng bơ me"),
+ (70,"Combo bánh tráng me bơ siêu toppings"),(74,"Combo bánh tráng tắc bơ siêu toppings"),(57,"Bánh tráng bò ngũ vị set sốt và topping"),
+ (80,"Bánh tráng mix sốt bơ tam vị"),(100,"Set bánh tráng sốt chua ngọt đủ topping"),(91,"Bánh tráng khô mực ớt dừa túi bạc"),
  (92,"Bánh tráng nướng set topping khay"),(98,"Bánh tráng nướng vỏ vàng và khay topping"),(75,"Bánh tráng cuộn bơ set đầy đủ"),
- (94,"Set 6 lọ topping và bánh tráng"),(95,"Set siêu vip topping lọ"),(96,"Bánh tráng bơ béo trứng muối cao cấp"),
- (97,"Set bánh tráng 4 lọ topping và bơ trứng gà"),(69,"Nguyên liệu trộn bánh tráng: vỏ, topping, sốt tắc")]
+ (94,"Set 6 lọ topping và bánh tráng"),(97,"Set bánh tráng 4 lọ topping và bơ trứng gà"),(69,"Nguyên liệu trộn bánh tráng: vỏ, topping, sốt tắc")]
 G_SAUCE = [(81,"Sốt me Sinh Thái Việt"),(78,"Sốt tắc Sinh Thái Việt"),(77,"Ớt rim Sinh Thái Việt"),
  (73,"Bơ trứng gà Sinh Thái Việt"),(72,"Bơ trứng gà chai bóp"),(79,"Tóp mỡ rim mắm hành hũ")]
 G_MAP = {"Bánh tráng trộn, phơi sương & dẻo tôm": G_TRON, "Set & combo ăn vặt": G_SET,
-         "Sốt, topping & gia vị lọ": G_SAUCE, "Sốt & dầu": G_SAUCE[:4], "Combo nguyên liệu": G_SET[:2]+G_SET[-1:],
+         "Sốt, topping & gia vị lọ": G_SAUCE, "Sốt & dầu": G_SAUCE[:4], "Combo nguyên liệu": G_SET[12:14]+G_SET[-1:],
          "Topping, bơ & gia vị": G_SAUCE[3:]}
 
 
