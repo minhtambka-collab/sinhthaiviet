@@ -167,8 +167,8 @@ def itemlist(items, name, path):
 
 # ---------- TRANG CHỦ ----------
 def home():
-    feats = [("img/anh/a45.jpg", "Sate bò ngũ vị"), ("img/anh/a41.jpg", "Gà sốt me cay"),
-             ("img/anh/a49.jpg", "Phô mai chà bông"), ("img/anh/a40.jpg", "Lá bò lục vị")]
+    feats = [("img/anh/b06.jpg", "Sate bò ngũ vị"), ("img/anh/b04.jpg", "Gà sốt me cay"),
+             ("img/anh/b07.jpg", "Phô mai chà bông"), ("img/anh/b05.jpg", "Lá bò lục vị")]
     fcards = "".join(f'<figure>{img(s, "Bánh tráng trộn " + t + " Sinh Thái Việt", "", 500, 500)}<figcaption>{t}</figcaption></figure>' for s, t in feats)
     body = f"""
 <section class="hero"><div class="wrap hero-in"><div>
@@ -207,50 +207,58 @@ def home():
 
 # ---------- CÂU CHUYỆN ----------
 def story():
+    def step(n, t, p, im, alt, href):
+        return (f'<article class="step"><span class="num">{n}</span><img src="../img/anh/{im}.webp" alt="{e(alt)}" width="520" height="520" loading="lazy" decoding="async">'
+                f'<div><h3>{t}</h3><p>{p}</p><a class="btn sm" href="{href}">Xem nhóm sản phẩm</a></div></article>')
+    steps = "".join([
+        step(1, "Mở túi là ăn: bánh tráng trộn sẵn", "Dành cho người bận rộn. Sợi bánh tráng đã tẩm vị, trộn sẵn khô bò, khô gà, tóp mỡ, hành phi, đậu phộng. Chọn vị sate bò ngũ vị, gà sốt me cay, phô mai gà cay, lá bò lục vị, hải sản...", "b06", "Bánh tráng trộn sate bò ngũ vị Sinh Thái Việt", "../san-pham/banh-trang-tron/"),
+        step(2, "Tự tay trộn: set vỏ, sốt và topping", "Dành cho người thích chủ động. Mỗi set có vỏ bánh tráng, túi sốt bơ trứng gà, sốt me hoặc sốt tắc và các hũ topping riêng. Bạn trộn đến đúng vị mình thích.", "b70", "Combo bánh tráng me bơ siêu toppings", "../san-pham/set-an-vat/"),
+        step(3, "Nướng và cuộn: món ăn vặt đường phố tại nhà", "Bánh tráng nướng vỏ vàng giòn kèm khay topping, hoặc bánh tráng cuộn bơ đầy đủ nhân. Đóng hút chân không, sẵn sàng cho buổi tụ họp.", "b92", "Bánh tráng nướng set topping khay", "../san-pham/set-an-vat/"),
+        step(4, "Sốt &amp; topping: linh hồn của món ăn", "Sốt me, sốt tắc, ớt rim, bơ trứng gà, tóp mỡ rim mắm hành, muối tép hành phi. Dùng kèm bánh tráng hoặc cho quán ăn vặt.", "b81", "Sốt me Sinh Thái Việt", "../san-pham/sot-topping-gia-vi/")])
     body = f"""
 <section class="sec pagehead"><div class="wrap"><nav class="bc" aria-label="Breadcrumb"><a href="../">Trang chủ</a> / Câu chuyện</nav>
-<h1>Câu chuyện Sinh Thái Việt</h1><p class="lead">Từ một hợp tác xã ở Thái Nguyên đến dòng sản phẩm bánh tráng đạt chuẩn quốc tế về an toàn thực phẩm.</p></div></section>
+<h1>Câu chuyện Sinh Thái Việt</h1><p class="lead">Từ một hợp tác xã ở Thái Nguyên đến những túi bánh tráng đạt chuẩn ISO 22000:2018, đi cùng bạn từ bữa ăn vặt nhanh đến quán ăn vặt của riêng mình.</p></div></section>
 
-<section class="sec"><div class="wrap narrow">
-<h2>Khởi nguồn: hợp tác xã đầu tư vào đồ ăn vặt Việt</h2>
-<p>Hợp tác xã Đầu tư Sinh Thái Việt được đăng ký thành lập ngày 17/4/2024 tại thành phố Thái Nguyên, với vốn điều lệ một tỷ đồng. Chúng tôi chọn bánh tráng, món ăn vặt quen thuộc của mọi lứa tuổi, làm nền tảng để xây dựng một chuỗi sản phẩm bài bản, thay vì chỉ bán lẻ từng gói.</p>
-<h2>Một tấm bánh tráng, nhiều cách thưởng thức</h2>
-<p>Từ tấm bánh tráng, chúng tôi phát triển ra bánh tráng trộn, phơi sương, dẻo tôm, cơm cháy, bánh tráng nướng, cùng các loại khô bò, khô gà, khô heo cháy tỏi, mực cán, mực rim và những lọ sốt, topping đi kèm. Mỗi sản phẩm được đóng gói tiện mang đi, đủ topping, sẵn sàng ăn liền.</p>
-</div></section>
+<section class="sec"><div class="wrap split">
+<div><h2>Khởi nguồn: một tấm bánh tráng, rất nhiều cách thưởng thức</h2>
+<p>Hợp tác xã Đầu tư Sinh Thái Việt được đăng ký thành lập ngày 17/4/2024 tại thành phố Thái Nguyên. Chúng tôi chọn bánh tráng, món ăn vặt quen thuộc của mọi lứa tuổi, làm điểm khởi đầu, với mong muốn đưa món ăn đường phố vào một chiếc túi sạch, đẹp, an toàn và dễ mang đi.</p>
+<p>Từ đó, mỗi sản phẩm của Sinh Thái Việt đều đi theo một câu hỏi: hôm nay bạn muốn ăn thế nào?</p></div>
+<img src="../img/anh/b18.webp" alt="Bánh tráng phơi sương và sốt đóng gói Sinh Thái Việt" width="700" height="700" loading="lazy"></div></section>
 
-<section class="sec alt"><div class="wrap split">
-{img("img/anh/a23.jpg", "Bánh tráng trộn đóng túi hút chân không nhiều topping", "../", 700, 700)}
-<div><h2>Sản phẩm của chúng tôi gồm những gì?</h2><ul class="ticks">
-<li>Bánh tráng trộn, phơi sương, dẻo tôm đóng túi zip và hút chân không</li>
-<li>Set ăn vặt: set cuộn, set nướng, set me bơ, set tắc bơ, khay khô tứ vị</li>
-<li>Khô bò, khô gà lá chanh, khô heo cháy tỏi, mực cán, khô mực cốt dừa</li>
-<li>Sốt me, sốt tắc, sốt bò, sốt ớt, bơ vàng, muối tép hành phi, tóp mỡ</li>
-<li>Nguyên liệu sỉ theo kg, can, thùng cho quán và đại lý</li></ul></div></div></section>
+<section class="sec alt"><div class="wrap"><h2>Hôm nay bạn muốn ăn thế nào?</h2><p class="muted">Chọn một hành trình, chúng tôi dẫn bạn đến đúng sản phẩm.</p><div class="steps">{steps}</div></div></section>
 
-<section class="sec"><div class="wrap narrow">
+<section class="sec"><div class="wrap split">
+<img src="../img/anh/b19.webp" alt="Gian hàng giới thiệu sản phẩm Hợp tác xã Đầu tư Sinh Thái Việt" width="700" height="500" loading="lazy">
+<div><h2>Gặp gỡ khách hàng, lắng nghe để làm tốt hơn</h2>
+<p>Chúng tôi mang sản phẩm đến các sự kiện và hội chợ để khách trải nghiệm trực tiếp, nhận góp ý về hương vị, quy cách đóng gói và giá bán. Đại lý và quán ăn vặt cũng là những người đồng hành lâu dài.</p>
+<p><a class="btn ghost" href="../dai-ly/">Trở thành đại lý</a></p></div></div></section>
+
+<section class="sec alt"><div class="wrap narrow">
 <h2>Cam kết an toàn: chuẩn ISO 22000:2018</h2>
 <p>Tháng 7/2025, Sinh Thái Việt được Công ty Cổ phần Chứng nhận WCERT cấp Giấy chứng nhận Hệ thống Quản lý An toàn Thực phẩm theo tiêu chuẩn ISO 22000:2018 (số W2386F), cho hoạt động sản xuất, đóng gói, kinh doanh các sản phẩm từ bánh tráng. Giấy chứng nhận có hiệu lực đến ngày 10/7/2028 và được đánh giá giám sát định kỳ hằng năm.</p>
 <p><a class="btn ghost" href="../chung-nhan/">Xem giấy chứng nhận</a></p>
 <h2>Ý nghĩa biểu tượng</h2>
 <div class="logo-story">{img("img/logo-2.png", "Logo Hợp tác xã Đầu tư Sinh Thái Việt", "../", 220, 220)}
-<p>Vòng tròn âm dương thể hiện sự cân bằng giữa con người, đồng tiền đầu tư và thiên nhiên. Bàn tay nâng đỡ cánh đồng và mầm cây là lời cam kết đồng hành cùng nhà vườn, người làm nghề và đại lý. Sắc vàng đất là màu của lúa chín, của bánh tráng giòn và của sự thịnh vượng.</p></div>
-<h2>Hướng đi tiếp theo</h2>
-<p>Chúng tôi tiếp tục mở rộng mạng lưới đại lý, chuẩn hóa nguyên liệu cho quán ăn vặt và phát triển thêm hương vị mới. Nếu bạn muốn trở thành đối tác, hãy liên hệ để được tư vấn chính sách giá và hỗ trợ khởi động.</p>
-<p><a class="btn" href="../dai-ly/">Trở thành đại lý</a></p>
-</div></section>
+<p>Vòng tròn âm dương thể hiện sự cân bằng giữa con người, đồng tiền đầu tư và thiên nhiên. Bàn tay nâng đỡ cánh đồng và mầm cây là lời cam kết đồng hành cùng nhà vườn, người làm nghề và đại lý. Sắc vàng đất là màu của lúa chín, của bánh tráng giòn và của sự thịnh vượng.</p></div></div></section>
+
+<section class="sec"><div class="wrap center"><h2>Sẵn sàng thử hoặc cùng kinh doanh?</h2>
+<p class="cta" style="justify-content:center"><a class="btn" href="../san-pham/">Xem sản phẩm</a><a class="btn ghost" href="../nguyen-lieu/">Nguyên liệu mở quán</a><a class="btn ghost" href="https://zalo.me/{PHONE}" target="_blank" rel="noopener">Zalo {PHONE_FMT}</a></p></div></section>
 """
     write("cau-chuyen", page("cau-chuyen/", "Câu chuyện thương hiệu Sinh Thái Việt | Hợp tác xã Đầu tư Thái Nguyên",
-                             "Câu chuyện Hợp tác xã Đầu tư Sinh Thái Việt: thành lập 2024 tại Thái Nguyên, sản xuất bánh tráng đạt chuẩn ISO 22000:2018, ý nghĩa logo và định hướng phát triển.",
-                             body, 1, "img/anh/a23.jpg", crumbs=[("Trang chủ", ""), ("Câu chuyện", "cau-chuyen/")]))
+                             "Câu chuyện Sinh Thái Việt: từ hợp tác xã Thái Nguyên đến bánh tráng trộn ISO 22000:2018. Chọn cách ăn: trộn sẵn, tự trộn, nướng cuộn, sốt và topping.",
+                             body, 1, "img/anh/b06.jpg", crumbs=[("Trang chủ", ""), ("Câu chuyện", "cau-chuyen/")]))
 
 
-# ---------- SẢN PHẨM ----------
 def products():
     body = f"""
 <section class="sec pagehead"><div class="wrap"><nav class="bc" aria-label="Breadcrumb"><a href="../">Trang chủ</a> / Sản phẩm</nav>
 <h1>Sản phẩm bánh tráng &amp; đặc sản ăn vặt</h1>
 <p class="lead">{len(BT)} sản phẩm: bánh tráng trộn, phơi sương, dẻo tôm, cơm cháy, khô, sốt và set ăn vặt. Giá hiển thị là giá bán lẻ khuyến nghị.</p></div></section>
 <section class="sec"><div class="wrap">{catalog(BT, "../", "bt")}</div></section>
+<section class="sec"><div class="wrap"><h2>Chọn theo cách bạn muốn ăn</h2><div class="cols3 linkbox">
+<a class="box" href="banh-trang-tron/"><img src="../img/anh/b06.webp" alt="Bánh tráng trộn sate bò ngũ vị" width="300" height="300" loading="lazy"><h3>Ăn liền, mở túi là có</h3><p>Bánh tráng trộn sẵn topping đóng túi đứng</p></a>
+<a class="box" href="set-an-vat/"><img src="../img/anh/b70.webp" alt="Combo bánh tráng me bơ siêu toppings" width="300" height="300" loading="lazy"><h3>Tự trộn tại nhà</h3><p>Set vỏ, sốt và topping rời để tự tay trộn</p></a>
+<a class="box" href="sot-topping-gia-vi/"><img src="../img/anh/b81.webp" alt="Sốt me Sinh Thái Việt" width="300" height="300" loading="lazy"><h3>Sốt &amp; topping</h3><p>Sốt me, sốt tắc, ớt rim, bơ trứng gà, tóp mỡ</p></a></div></div></section>
 <section class="sec alt"><div class="wrap"><h2>Thư viện ảnh sản phẩm</h2><div class="gallery">
 {"".join(img(f"img/anh/a{i:02d}.jpg", "Bánh tráng trộn Sinh Thái Việt - ảnh sản phẩm " + str(i), "../", 500, 500) for i in [36,37,38,39,40,41,42,43,44,46,47,48,49,50])}
 </div></div></section>"""
@@ -476,6 +484,35 @@ def wp(src):
     return re.sub(r"\.(jpe?g|png)$", ".webp", src) if src.startswith(("img/anh/", "img/sp/")) else src
 
 
+
+# =========== ẢNH SẢN PHẨM THEO NHÓM ===========
+G_TRON = [(6,"Bánh tráng trộn sate bò ngũ vị"),(4,"Bánh tráng trộn gà sốt me cay"),(3,"Bánh tráng trộn phô mai gà cay"),
+ (5,"Bánh tráng trộn lá bò lục vị"),(2,"Bánh tráng trộn tỏi thơm bò cao cấp"),(8,"Bánh tráng trộn hải sản cao cấp"),
+ (7,"Bánh tráng trộn phô mai chà bông"),(11,"Bánh tráng trộn mát cha chà bông"),(88,"Bánh tráng bò bò lục vị"),
+ (87,"Bánh tráng trộn phô mai gà quay"),(51,"Bánh tráng trộn sate me khô mực"),(25,"Bánh tráng trộn thập cẩm cao cấp"),
+ (27,"Bánh tráng vương tôm đặc biệt"),(28,"Bánh tráng lá tỏi bò"),(29,"Bánh tráng rong biển cháy tỏi"),
+ (34,"Bánh tráng phô mai lá dứa"),(35,"Bánh tráng cuộn phô mai sốt bơ"),(37,"Bánh tráng lắc vị tomyum"),
+ (38,"Bánh tráng lắc vị trứng muối"),(40,"Bánh tráng lắc vị kimchi"),(44,"Bánh tráng cuộn dứa thập cẩm"),
+ (48,"Bánh tráng sợi nguyên sate bò"),(49,"Bánh tráng phô mai tôm"),(101,"Bánh tráng sọt phô mai sốt mai")]
+G_SET = [(70,"Combo bánh tráng me bơ siêu toppings"),(74,"Combo bánh tráng tắc bơ siêu toppings"),(57,"Bánh tráng bò ngũ vị set sốt và topping"),
+ (58,"Bánh tráng me lục vị"),(71,"Bánh tráng bơ lục vị"),(63,"Bánh tráng bơ me"),(80,"Bánh tráng mix sốt bơ tam vị"),
+ (53,"Bánh tráng sốt chua ngọt"),(100,"Set bánh tráng sốt chua ngọt đủ topping"),(99,"Bánh tráng khô mực cốt dừa"),
+ (91,"Bánh tráng khô mực ớt dừa túi bạc"),(83,"Bánh tráng phơi sương best seller mix sốt muối tép hành phi"),
+ (82,"Bánh tráng phơi sương bơ béo muối tép"),(84,"Bánh tráng phơi sương mini"),(85,"Bánh tráng phơi sương best seller mix sốt"),
+ (92,"Bánh tráng nướng set topping khay"),(98,"Bánh tráng nướng vỏ vàng và khay topping"),(75,"Bánh tráng cuộn bơ set đầy đủ"),
+ (94,"Set 6 lọ topping và bánh tráng"),(95,"Set siêu vip topping lọ"),(96,"Bánh tráng bơ béo trứng muối cao cấp"),
+ (97,"Set bánh tráng 4 lọ topping và bơ trứng gà"),(69,"Nguyên liệu trộn bánh tráng: vỏ, topping, sốt tắc")]
+G_SAUCE = [(81,"Sốt me Sinh Thái Việt"),(78,"Sốt tắc Sinh Thái Việt"),(77,"Ớt rim Sinh Thái Việt"),
+ (73,"Bơ trứng gà Sinh Thái Việt"),(72,"Bơ trứng gà chai bóp"),(79,"Tóp mỡ rim mắm hành hũ")]
+G_MAP = {"Bánh tráng trộn, phơi sương & dẻo tôm": G_TRON, "Set & combo ăn vặt": G_SET,
+         "Sốt, topping & gia vị lọ": G_SAUCE, "Sốt & dầu": G_SAUCE[:4], "Combo nguyên liệu": G_SET[:2]+G_SET[-1:],
+         "Topping, bơ & gia vị": G_SAUCE[3:]}
+
+
+def gallery_html(items, rel, h2="Hình ảnh sản phẩm"):
+    figs = "".join(f'<figure><img src="{rel}img/anh/b{n:02d}.webp" alt="{e(c)} - Sinh Thái Việt" width="600" height="600" loading="lazy" decoding="async"><figcaption>{e(c)}</figcaption></figure>' for n, c in items)
+    return f'<h2>{h2}</h2><div class="gal2">{figs}</div>'
+
 def cat_page(items, base, cat, sl):
     info = CAT_INFO[cat]
     its = [p for p in items if p["cat"] == cat]
@@ -488,6 +525,7 @@ def cat_page(items, base, cat, sl):
 <h1>{e(info["h1"])}</h1><p class="lead">{e(info["intro"][0])}</p></div></section>
 <section class="sec"><div class="wrap"><p class="narrow">{e(info["intro"][1])}</p>
 <h2>{len(its)} sản phẩm trong nhóm</h2><div class="grid">{grid}</div></div></section>
+{('<section class="sec alt"><div class="wrap">' + gallery_html(G_MAP[cat], "../../") + '</div></section>') if cat in G_MAP else ""}
 <section class="sec alt"><div class="wrap narrow"><h2>Câu hỏi thường gặp</h2>{faq}
 <h2>Nhóm khác</h2><p class="pills">{others}</p>
 <p><a class="btn" href="https://zalo.me/{PHONE}" target="_blank" rel="noopener">Nhận báo giá qua Zalo {PHONE_FMT}</a></p></div></section>"""
@@ -600,6 +638,14 @@ EXTRA_CSS = """
 .linkbox a{text-decoration:none;color:var(--ink)}.linkbox a:hover{border-color:var(--gold)}.linkbox p{margin:0;color:var(--muted)}
 .article h2{margin-top:1.6em}.article li{margin:.4em 0}.cols3 .box h2{font-size:1.15rem}.cols3 .box h2 a{text-decoration:none;color:var(--ink)}
 .bc a{color:var(--muted)}.split.top>img{max-height:none}
+"""
+EXTRA_CSS += """
+.gal2{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px}.gal2 figure{margin:0;background:#fff;border:1px solid var(--cream2);border-radius:14px;overflow:hidden}
+.gal2 img{aspect-ratio:1;object-fit:cover;width:100%}.gal2 figcaption{padding:10px 12px;font-size:.88rem;font-weight:600}
+.steps{display:grid;gap:22px;margin-top:24px}.step{display:grid;grid-template-columns:48px 260px 1fr;gap:20px;align-items:center;background:#fff;border:1px solid var(--cream2);border-radius:18px;padding:16px}
+.step img{border-radius:14px;aspect-ratio:1;object-fit:cover;width:100%}.num{width:44px;height:44px;border-radius:50%;background:var(--gold);color:#fff;display:grid;place-items:center;font-weight:700;font-size:1.2rem}
+.linkbox .box img{border-radius:12px;margin-bottom:12px;aspect-ratio:1;object-fit:cover;width:100%}
+@media(max-width:860px){.step{grid-template-columns:1fr}.num{margin:0}}
 """
 CSS += EXTRA_CSS
 
