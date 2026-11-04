@@ -66,7 +66,7 @@ NAV = [("", "Trang chủ"), ("cau-chuyen/", "Câu chuyện"), ("san-pham/", "S�
        ("nguyen-lieu/", "Nguyên liệu sỉ"), ("dai-ly/", "Đại lý & sỉ"), ("kien-thuc/", "Kiến thức"), ("chung-nhan/", "Chứng nhận"), ("lien-he/", "Liên hệ")]
 
 
-def page(path, title, desc, body, depth=0, og_img="img/anh/a45.jpg", jsonld=None, crumbs=None):
+def page(path, title, desc, body, depth=0, og_img="img/anh/b102.jpg", jsonld=None, crumbs=None):
     rel = "../" * depth
     url = f"{DOMAIN}/{path}"
     nav = "".join(
@@ -181,7 +181,7 @@ def home():
 <p class="lead">Từ tấm bánh tráng đến hũ, túi, set ăn vặt hoàn chỉnh. Sản xuất và đóng gói theo hệ thống an toàn thực phẩm ISO 22000:2018, phục vụ khách lẻ, đại lý và quán ăn vặt trên toàn quốc.</p>
 <p class="cta"><a class="btn" href="san-pham/">Xem sản phẩm</a><a class="btn ghost" href="dai-ly/">Làm đại lý / mua sỉ</a></p>
 <ul class="badges"><li>ISO 22000:2018</li><li>{len(BT)}+ sản phẩm</li><li>{len(NVL)}+ nguyên liệu sỉ</li></ul>
-</div>{img("img/anh/a45.jpg", "Bánh tráng trộn sate bò ngũ vị Sinh Thái Việt", "", 700, 700, "hero-img", lazy=False)}</div></section>
+</div>{img("img/anh/b102.jpg", "Bánh tráng trộn sate bò ngũ vị Sinh Thái Việt", "", 700, 700, "hero-img", lazy=False)}</div></section>
 
 <section class="sec"><div class="wrap"><h2>Vì sao chọn Sinh Thái Việt?</h2>
 <div class="cols3">
@@ -194,7 +194,7 @@ def home():
 <div class="feat">{fcards}</div><p class="center"><a class="btn" href="san-pham/">Xem toàn bộ {len(BT)} sản phẩm</a></p></div></section>
 
 <section class="sec"><div class="wrap split">
-{img("img/anh/a20.jpg", "Set bánh tráng trộn topping nhiều màu Sinh Thái Việt", "", 700, 700)}
+{img("img/anh/b120.jpg", "Set bánh tráng trộn topping nhiều màu Sinh Thái Việt", "", 700, 700)}
 <div><h2>Câu chuyện thương hiệu</h2>
 <p>Biểu tượng Sinh Thái Việt là bàn tay nâng đỡ cánh đồng và mầm cây, gắn với đồng tiền và nhịp sống hiện đại. Đó cũng là cách chúng tôi làm nghề: tôn trọng nguyên liệu, nâng niu người làm ra, đầu tư dài hạn vào chất lượng.</p>
 <p><a class="btn ghost" href="cau-chuyen/">Đọc câu chuyện</a></p></div></div></section>
@@ -264,7 +264,7 @@ def products():
 <a class="box" href="set-an-vat/"><img src="../img/anh/b70.webp" alt="Combo bánh tráng me bơ siêu toppings" width="300" height="300" loading="lazy"><h3>Tự trộn tại nhà</h3><p>Set vỏ, sốt và topping rời để tự tay trộn</p></a>
 <a class="box" href="sot-topping-gia-vi/"><img src="../img/anh/b81.webp" alt="Sốt me Sinh Thái Việt" width="300" height="300" loading="lazy"><h3>Sốt &amp; topping</h3><p>Sốt me, sốt tắc, ớt rim, bơ trứng gà, tóp mỡ</p></a></div></div></section>
 <section class="sec alt"><div class="wrap"><h2>Thư viện ảnh sản phẩm</h2><div class="gallery">
-{"".join(img(f"img/anh/a{i:02d}.jpg", "Bánh tráng trộn Sinh Thái Việt - ảnh sản phẩm " + str(i), "../", 500, 500) for i in [36,37,38,39,40,41,42,43,44,46,47,48,49,50])}
+{"".join(img(f"img/anh/b{i}.jpg", "Bánh tráng trộn Sinh Thái Việt - ảnh sản phẩm " + str(i), "../", 500, 500) for i in range(102,133))}
 </div></div></section>"""
     write("san-pham", page("san-pham/", f"{len(BT)} sản phẩm bánh tráng trộn, khô bò, mực, sốt | Sinh Thái Việt",
                            "Danh mục bánh tráng trộn, phơi sương, dẻo tôm, cơm cháy, khô bò, khô gà, mực rim, sốt me tắc, set ăn vặt. Giá bán lẻ khuyến nghị. Đặt hàng qua Zalo 0362 771 650.",
@@ -307,7 +307,7 @@ def dealer():
         {"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in FAQ]}
     write("dai-ly", page("dai-ly/", "Làm đại lý bánh tráng, mua sỉ từ 30 gói | Sinh Thái Việt",
                          "Chính sách đại lý và giá sỉ bánh tráng trộn Sinh Thái Việt: đại lý chiến lược, đại lý, sỉ từ 30 gói. Sản phẩm ISO 22000:2018. Liên hệ Zalo 0362 771 650.",
-                         body, 1, "img/anh/a20.jpg", jsonld=[faqld], crumbs=[("Trang chủ", ""), ("Đại lý & sỉ", "dai-ly/")]))
+                         body, 1, "img/anh/b120.jpg", jsonld=[faqld], crumbs=[("Trang chủ", ""), ("Đại lý & sỉ", "dai-ly/")]))
 
 
 # ---------- CHỨNG NHẬN ----------
@@ -539,7 +539,7 @@ def cat_page(items, base, cat, sl):
     faqld = {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [
         {"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in info["faq"]]}
     path = f"{base}/{sl[cat]}"
-    ogi = its[0]["img"] if its and its[0]["img"] else "img/anh/a45.jpg"
+    ogi = its[0]["img"] if its and its[0]["img"] else "img/anh/b102.jpg"
     write(path, page(path + "/", info["title"], info["desc"], body, 2, ogi,
                      jsonld=[itemlist(its, info["h1"], path + "/"), faqld],
                      crumbs=[("Trang chủ", ""), parent, (cat, path + "/")]))
@@ -572,7 +572,7 @@ def prod_page(p, items, sl):
                       "url": f"{DOMAIN}/{p['url']}", "seller": {"@id": f"{DOMAIN}/#org"}}}
     title = f"{p['name']}{' (nguyên liệu sỉ)' if base == 'nguyen-lieu' else ''} - giá {p['price']} | Sinh Thái Việt"
     d = f"{p['name']} giá {p['price']}/{p['unit'].lower()}, {cat.lower()} Sinh Thái Việt đạt ISO 22000:2018. Mua lẻ, mua sỉ, làm đại lý. Zalo {PHONE_FMT}."
-    write(p["url"].rstrip("/"), page(p["url"], title, d[:300], body, 3, p["img"] or "img/anh/a45.jpg", jsonld=[pld],
+    write(p["url"].rstrip("/"), page(p["url"], title, d[:300], body, 3, p["img"] or "img/anh/b102.jpg", jsonld=[pld],
                                       crumbs=[("Trang chủ", ""), parent, (cat, f"{base}/{p['cslug']}/"), (p["name"], p["url"])]))
 
 
@@ -620,7 +620,7 @@ def articles():
         ld = {"@context": "https://schema.org", "@type": "Article", "headline": a["title"], "description": a["desc"],
               "datePublished": TODAY, "dateModified": TODAY, "inLanguage": "vi",
               "author": {"@id": f"{DOMAIN}/#org"}, "publisher": {"@id": f"{DOMAIN}/#org"},
-              "mainEntityOfPage": f"{DOMAIN}/{path}/", "image": f"{DOMAIN}/img/anh/a45.jpg"}
+              "mainEntityOfPage": f"{DOMAIN}/{path}/", "image": f"{DOMAIN}/img/anh/b102.jpg"}
         write(path, page(path + "/", a["title"] + " | Sinh Thái Việt", a["desc"], b, 2, jsonld=[ld],
                          crumbs=[("Trang chủ", ""), ("Kiến thức", "kien-thuc/"), (a["title"], path + "/")]))
 
