@@ -4,7 +4,7 @@ import json, os, re, html, shutil, datetime
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(ROOT, "dist")
-DOMAIN = "https://sinhthaiviet.vercel.app"
+DOMAIN = "https://sinhthaiviet.vn"
 PHONE = "0362771650"
 PHONE_FMT = "0362 771 650"
 ADDR = "Số nhà 5, Tổ 1, Phường Đồng Quang, TP. Thái Nguyên"
