@@ -174,34 +174,63 @@ def home():
     feats = [("img/anh/b102.jpg", "Sate bò ngũ vị"), ("img/anh/b107.jpg", "Gà sốt me cay"),
              ("img/anh/b105.jpg", "Phô mai chà bông"), ("img/anh/b108.jpg", "Lá bò lục vị")]
     fcards = "".join(f'<figure>{img(s, "Bánh tráng trộn " + t + " Sinh Thái Việt", "", 500, 500)}<figcaption>{t}</figcaption></figure>' for s, t in feats)
+    def tile(cls, href, im, t, sub, alt):
+        return (f'<a class="tile {cls}" href="{href}"><span class="tt"><b>{t}</b><small>{sub}</small><i>Xem ngay &rarr;</i></span>'
+                f'{img(im, alt, "", 420, 420)}</a>')
+    tiles = (tile("t-red", "san-pham/banh-trang-tron/", "img/anh/b102.jpg", "Ăn liền", "Mở túi là có, đủ topping", "Bánh tráng trộn saté bò ngũ vị")
+             + tile("t-grn", "san-pham/set-an-vat/", "img/anh/b129.jpg", "Tự trộn tại nhà", "Set vỏ, sốt, topping riêng", "Bánh tráng bơ me Sinh Thái Việt")
+             + tile("t-yel", "san-pham/set-an-vat/", "img/anh/b122.jpg", "Set &amp; combo", "Quà ăn vặt, tụ tập bạn bè", "Set dẻo tôm bơ chà bông")
+             + tile("t-ora", "san-pham/sot-topping-gia-vi/", "img/anh/b119.jpg", "Sốt &amp; topping", "Me, tắc, ớt rim, tóp mỡ", "Bánh tráng tóp mỡ hành phi"))
+    best = [(102, "Saté bò ngũ vị", "r"), (107, "Gà sốt me cay", "o"), (105, "Phô mai chà bông", "y"), (108, "Lá bò lục vị", "o"),
+            (104, "Hải sản cao cấp", "y"), (110, "Tỏi thơm bò cay", "g"), (106, "Mật chà chà bông", "g"), (111, "Saté me khô mực", "r")]
+    bcards = "".join(f'<a class="bc {c}" href="san-pham/banh-trang-tron/">{img(f"img/anh/b{n}.jpg", "Bánh tráng trộn " + t + " Sinh Thái Việt", "", 420, 420)}<span>{t}</span></a>' for n, t, c in best)
+    flav = ["Saté bò ngũ vị", "Gà sốt me cay", "Phô mai chà bông", "Lá bò lục vị", "Hải sản cao cấp", "Tỏi thơm bò cay", "Mật chà chà bông",
+            "Bơ ngũ vị", "Me lục vị", "Tóp mỡ hành phi", "Khô mực cốt dừa", "Xì ke đặc biệt", "Phơi sương muối tép"]
+    mq = "".join(f"<span>{f}</span><em>&#10022;</em>" for f in flav)
     body = f"""
-<section class="hero"><div class="wrap hero-in"><div>
-<p class="eyebrow">Hợp tác xã Đầu tư Sinh Thái Việt · Thái Nguyên</p>
-<h1>Bánh tráng trộn &amp; đặc sản ăn vặt đạt chuẩn ISO 22000</h1>
-<p class="lead">Từ tấm bánh tráng đến hũ, túi, set ăn vặt hoàn chỉnh. Sản xuất và đóng gói theo hệ thống an toàn thực phẩm ISO 22000:2018, phục vụ khách lẻ, đại lý và quán ăn vặt trên toàn quốc.</p>
-<p class="cta"><a class="btn" href="san-pham/">Xem sản phẩm</a><a class="btn ghost" href="dai-ly/">Làm đại lý / mua sỉ</a></p>
-<ul class="badges"><li>ISO 22000:2018</li><li>{len(BT)}+ sản phẩm</li><li>{len(NVL)}+ nguyên liệu sỉ</li></ul>
-</div>{img("img/anh/b102.jpg", "Bánh tráng trộn sate bò ngũ vị Sinh Thái Việt", "", 700, 700, "hero-img", lazy=False)}</div></section>
+<section class="hero2"><div class="wrap hero2-in"><div class="h2txt">
+<p class="eyebrow2">Hợp tác xã Đầu tư Sinh Thái Việt · Thái Nguyên</p>
+<h1>Bánh tráng trộn <em>cay – giòn – đã miệng</em><span class="h1s">Đạt chuẩn ISO 22000:2018</span></h1>
+<p class="lead2">Mở túi là có ngay món ăn vặt đường phố: sợi bánh tráng tẩm vị, khô bò, khô gà, tóp mỡ, hành phi, đậu phộng. Bán lẻ, bán sỉ, cung cấp nguyên liệu mở quán trên toàn quốc.</p>
+<p class="cta"><a class="btn y" href="san-pham/">Chọn vị ngay</a><a class="btn w" href="dai-ly/">Làm đại lý / mua sỉ</a></p>
+<ul class="badges2"><li>ISO 22000:2018</li><li>{len(BT)}+ sản phẩm</li><li>{len(NVL)}+ nguyên liệu sỉ</li><li>Không chất bảo quản</li></ul>
+</div><div class="h2pic">
+{img("img/anh/b102.jpg", "Bánh tráng trộn sate bò ngũ vị Sinh Thái Việt", "", 700, 700, "m", lazy=False)}
+{img("img/anh/b107.jpg", "Bánh tráng trộn gà sốt me cay", "", 300, 300, "s1")}
+{img("img/anh/b105.jpg", "Bánh tráng trộn phô mai chà bông", "", 300, 300, "s2")}
+</div></div><svg class="wave" viewBox="0 0 1440 60" preserveAspectRatio="none" aria-hidden="true"><path d="M0,30 C240,70 480,0 720,30 C960,60 1200,10 1440,30 L1440,60 L0,60 Z" fill="#FFF3C4"/></svg></section>
 
-<section class="sec"><div class="wrap"><h2>Vì sao chọn Sinh Thái Việt?</h2>
+<div class="mq" aria-label="Các vị bánh tráng"><div class="mq-in">{mq}{mq}</div></div>
+
+<section class="sec cream"><div class="wrap"><h2 class="sh">Hôm nay bạn muốn <em>ăn kiểu nào?</em></h2>
+<p class="muted center">Chọn đúng cách bạn thích, chúng tôi dẫn bạn tới đúng món.</p>
+<div class="tiles">{tiles}</div></div></section>
+
+<section class="sec"><div class="wrap"><h2 class="sh">Vị được <em>săn nhiều nhất</em></h2>
+<p class="muted center">Túi zip, hút chân không, đủ topping. Màu bao bì khác nhau để bạn nhớ vị.</p>
+<div class="bgrid">{bcards}</div><p class="center"><a class="btn" href="san-pham/">Xem toàn bộ {len(BT)} sản phẩm</a></p></div></section>
+
+<section class="stats"><div class="wrap"><div class="st"><b>ISO 22000</b><span>Chứng nhận số W2386F, WCERT</span></div>
+<div class="st"><b>{len(BT)}+</b><span>Sản phẩm bánh tráng &amp; ăn vặt</span></div>
+<div class="st"><b>{len(NVL)}+</b><span>Nguyên liệu sỉ cho quán</span></div>
+<div class="st"><b>Từ 30 gói</b><span>Giá sỉ, 3 mức đại lý</span></div></div></section>
+
+<section class="sec"><div class="wrap"><h2 class="sh">Vì sao chọn <em>Sinh Thái Việt?</em></h2>
 <div class="cols3">
-<div class="box"><h3>Quản lý an toàn thực phẩm</h3><p>Chứng nhận ISO 22000:2018 số W2386F do WCERT cấp, hiệu lực 11/7/2025 – 10/7/2028, phạm vi sản xuất, đóng gói, kinh doanh sản phẩm từ bánh tráng.</p></div>
-<div class="box"><h3>Danh mục đầy đủ</h3><p>Bánh tráng trộn, phơi sương, dẻo tôm, cơm cháy, khô bò – gà – mực, sốt và topping. Bán lẻ, bán sỉ và cung cấp nguyên liệu.</p></div>
-<div class="box"><h3>Chính sách đại lý rõ ràng</h3><p>Ba mức giá: đại lý chiến lược, đại lý và giá sỉ từ 30 gói, kèm giá bán lẻ khuyến nghị để dễ lên kế hoạch kinh doanh.</p></div>
+<div class="box why"><span class="ic">&#9989;</span><h3>An toàn thực phẩm</h3><p>ISO 22000:2018 số W2386F do WCERT cấp, hiệu lực 11/7/2025 – 10/7/2028, phạm vi sản xuất, đóng gói, kinh doanh sản phẩm từ bánh tráng.</p></div>
+<div class="box why"><span class="ic">&#127836;</span><h3>Danh mục đầy đủ</h3><p>Bánh tráng trộn, phơi sương, dẻo tôm, cơm cháy, khô bò – gà – mực, sốt và topping. Bán lẻ, bán sỉ và cung cấp nguyên liệu.</p></div>
+<div class="box why"><span class="ic">&#129309;</span><h3>Chính sách đại lý rõ ràng</h3><p>Ba mức giá: đại lý chiến lược, đại lý và giá sỉ từ 30 gói, kèm giá bán lẻ khuyến nghị để dễ lên kế hoạch kinh doanh.</p></div>
 </div></div></section>
 
-<section class="sec alt"><div class="wrap"><h2>Sản phẩm được yêu thích</h2><p class="muted">Một số vị bánh tráng trộn đóng túi zip, hút chân không, đủ topping.</p>
-<div class="feat">{fcards}</div><p class="center"><a class="btn" href="san-pham/">Xem toàn bộ {len(BT)} sản phẩm</a></p></div></section>
-
-<section class="sec"><div class="wrap split">
+<section class="sec cream"><div class="wrap split">
 {img("img/anh/b120.jpg", "Set bánh tráng trộn topping nhiều màu Sinh Thái Việt", "", 700, 700)}
 <div><h2>Câu chuyện thương hiệu</h2>
 <p>Biểu tượng Sinh Thái Việt là bàn tay nâng đỡ cánh đồng và mầm cây, gắn với đồng tiền và nhịp sống hiện đại. Đó cũng là cách chúng tôi làm nghề: tôn trọng nguyên liệu, nâng niu người làm ra, đầu tư dài hạn vào chất lượng.</p>
-<p><a class="btn ghost" href="cau-chuyen/">Đọc câu chuyện</a></p></div></div></section>
+<p><a class="btn" href="cau-chuyen/">Đọc câu chuyện</a></p></div></div></section>
 
-<section class="sec alt"><div class="wrap"><h2>Cung cấp nguyên liệu cho quán ăn vặt</h2>
-<p>Vỏ bánh tráng, sốt me – tắc – bò – ớt, khô bò, khô gà, mực cán, hành phi, tóp mỡ, bơ... đóng can, thùng hoặc theo kg. Có sẵn combo trộn, cuộn, nướng để mở quán nhanh.</p>
-<p><a class="btn" href="nguyen-lieu/">Xem bảng nguyên liệu</a></p></div></section>
+<section class="cta-band"><div class="wrap"><div><h2>Mở quán ăn vặt? Lấy nguyên liệu sỉ ngay</h2>
+<p>Vỏ bánh tráng, sốt me – tắc – bò – ớt, khô bò, khô gà, mực cán, hành phi, tóp mỡ, bơ... đóng can, thùng hoặc theo kg. Có sẵn combo trộn, cuộn, nướng để mở quán nhanh.</p></div>
+<p class="cta"><a class="btn y" href="nguyen-lieu/">Xem bảng nguyên liệu</a><a class="btn w" href="https://zalo.me/{PHONE}">Nhắn Zalo {PHONE}</a></p></div></section>
 {home_extra()}
 """
     write("", page("", "Bánh tráng trộn Thái Nguyên: bán sỉ & lẻ, ISO 22000 | Sinh Thái Việt",
@@ -655,6 +684,42 @@ EXTRA_CSS += """
 @media(max-width:860px){.step{grid-template-columns:1fr}.num{margin:0}}
 """
 CSS += EXTRA_CSS
+
+
+CSS += """
+:root{--red:#C41E1E;--red-d:#8E0F14;--ora:#F26A1B;--yel:#FFC83D;--grn:#2E9B3E}
+.hero2{position:relative;background:radial-gradient(circle at 78% 40%,#FF8A1F 0,#E8431A 38%,#9E1117 75%,#6E0A10 100%);color:#fff;overflow:hidden;padding:56px 0 90px}
+.hero2:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 20% 10%,rgba(255,200,61,.25),transparent 40%);pointer-events:none}
+.hero2-in{position:relative;display:grid;grid-template-columns:1.05fr 1fr;gap:30px;align-items:center}
+.eyebrow2{display:inline-block;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.35);padding:6px 14px;border-radius:999px;font-size:.78rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin:0 0 16px}
+.hero2 h1{color:#fff;font-size:clamp(2rem,5vw,3.5rem);text-shadow:0 3px 14px rgba(0,0,0,.25)}.hero2 h1 em{font-style:normal;color:var(--yel);display:block}
+.h1s{display:block;font-family:"Be Vietnam Pro",sans-serif;font-size:1rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:#fff;margin-top:12px;opacity:.95}.lead2{font-size:1.1rem;color:#FFEBD2;max-width:34em}
+.btn.y{background:var(--yel);border-color:var(--yel);color:#5a1200;box-shadow:0 6px 0 #C98F0B}.btn.y:hover{transform:translateY(2px);box-shadow:0 4px 0 #C98F0B}
+.btn.w{background:transparent;border-color:#fff;color:#fff}.btn.w:hover{background:#fff;color:var(--red)}
+.cta{display:flex;gap:12px;flex-wrap:wrap;margin:22px 0}
+.badges2{list-style:none;padding:0;margin:0;display:flex;gap:10px;flex-wrap:wrap}.badges2 li{background:rgba(0,0,0,.22);padding:6px 14px;border-radius:999px;font-size:.85rem;font-weight:600}
+.h2pic{position:relative;min-height:420px}.h2pic .m{width:78%;margin:0 auto;border-radius:28px;box-shadow:0 30px 60px rgba(0,0,0,.45);transform:rotate(2deg);border:5px solid rgba(255,255,255,.9);aspect-ratio:1;object-fit:cover}
+.h2pic .s1,.h2pic .s2{position:absolute;width:34%;border-radius:20px;border:4px solid #fff;box-shadow:0 14px 30px rgba(0,0,0,.4);aspect-ratio:1;object-fit:cover}
+.h2pic .s1{left:-2%;bottom:-6%;transform:rotate(-8deg)}.h2pic .s2{right:-2%;top:-4%;transform:rotate(7deg)}
+.wave{position:absolute;bottom:-1px;left:0;width:100%;height:50px}
+.mq{background:#FFF3C4;overflow:hidden;white-space:nowrap;border-bottom:3px solid var(--yel);padding:10px 0}
+.mq-in{display:inline-block;animation:mq 40s linear infinite}.mq span{font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:.04em;margin:0 14px}.mq em{font-style:normal;color:var(--ora)}
+@keyframes mq{to{transform:translateX(-50%)}}@media(prefers-reduced-motion:reduce){.mq-in{animation:none}}
+.cream{background:#FFF3C4}.sh{text-align:center;font-size:clamp(1.6rem,3.5vw,2.3rem)}.sh em{font-style:normal;color:var(--red)}
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:26px}
+.tile{position:relative;border-radius:24px;overflow:hidden;text-decoration:none;color:#fff;display:flex;flex-direction:column;box-shadow:0 12px 28px rgba(0,0,0,.18);transition:.25s}.tile:hover{transform:translateY(-6px) rotate(-.5deg)}
+.tile .tt{padding:18px 18px 4px;display:block}.tile b{display:block;font-family:Lora,serif;font-size:1.35rem}.tile small{display:block;opacity:.92;font-size:.88rem;margin:2px 0 8px}.tile i{font-style:normal;font-weight:700;font-size:.85rem;background:rgba(255,255,255,.2);padding:4px 12px;border-radius:999px}
+.tile img{width:100%;aspect-ratio:1;object-fit:cover;margin-top:12px}
+.t-red{background:linear-gradient(160deg,#E8301E,#8E0F14)}.t-grn{background:linear-gradient(160deg,#35A84A,#1D6B2C)}.t-yel{background:linear-gradient(160deg,#F5A800,#C46A00)}.t-ora{background:linear-gradient(160deg,#FF8A1F,#D1440F)}
+.bgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin:26px 0}
+.bc{border-radius:20px;overflow:hidden;text-decoration:none;color:#fff;font-weight:700;text-align:center;display:block;box-shadow:0 8px 20px rgba(0,0,0,.14);transition:.2s}.bc:hover{transform:scale(1.03)}
+.bc img{aspect-ratio:1;object-fit:cover;width:100%}.bc span{display:block;padding:11px 8px}.bc.r span{background:var(--red)}.bc.o span{background:var(--ora)}.bc.y span{background:#D99100}.bc.g span{background:var(--grn)}
+.stats{background:linear-gradient(90deg,#6E0A10,#B3181C 50%,#6E0A10);color:#fff;padding:34px 0}.stats .wrap{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;text-align:center}
+.st b{display:block;font-family:Lora,serif;font-size:clamp(1.5rem,3vw,2.3rem);color:var(--yel)}.st span{font-size:.9rem;opacity:.92}
+.why{border-top:5px solid var(--ora);background:#fff}.why .ic{font-size:2rem;display:block;margin-bottom:6px}
+.cta-band{background:linear-gradient(120deg,#FF8A1F,#C41E1E);color:#fff;padding:46px 0}.cta-band .wrap{display:flex;gap:30px;align-items:center;justify-content:space-between;flex-wrap:wrap}.cta-band h2{color:#fff}.cta-band p{max-width:40em;margin:0}
+@media(max-width:900px){.hero2-in{grid-template-columns:1fr}.h2pic{min-height:0;margin:10px 18px 20px}.tiles,.bgrid{grid-template-columns:repeat(2,1fr)}.stats .wrap{grid-template-columns:repeat(2,1fr)}}
+"""
 
 
 def to_webp():
