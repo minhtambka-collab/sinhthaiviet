@@ -34,3 +34,10 @@ details{background:#fff;border:1px solid var(--cream2);border-radius:12px;paddin
 .zalo{position:fixed;right:16px;bottom:16px;background:#0068ff;color:#fff;width:56px;height:56px;border-radius:50%;display:grid;place-items:center;font-weight:700;text-decoration:none;box-shadow:0 6px 18px rgba(0,0,0,.3);z-index:60}
 @media(max-width:860px){.hero-in,.split,.cols3,.ft-grid{grid-template-columns:1fr}.feat{grid-template-columns:repeat(2,1fr)}.burger{display:block}
 nav{display:none;position:absolute;left:0;right:0;top:66px;background:var(--bg);padding:12px 20px;border-bottom:1px solid var(--cream2);flex-direction:column}nav.open{display:flex}nav a{margin:0;padding:10px 0}.logo-story{flex-direction:column;align-items:flex-start}}
+
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.cb h3 a{color:inherit;text-decoration:none}.cb h3 a:hover{color:var(--gold-d)}
+.pills{display:flex;flex-wrap:wrap;gap:8px}.pill{border:1px solid var(--gold);border-radius:999px;padding:6px 14px;text-decoration:none;font-size:.9rem;background:#fff}
+.linkbox a{text-decoration:none;color:var(--ink)}.linkbox a:hover{border-color:var(--gold)}.linkbox p{margin:0;color:var(--muted)}
+.article h2{margin-top:1.6em}.article li{margin:.4em 0}.cols3 .box h2{font-size:1.15rem}.cols3 .box h2 a{text-decoration:none;color:var(--ink)}
+.bc a{color:var(--muted)}.split.top>img{max-height:none}

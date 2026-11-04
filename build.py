@@ -59,7 +59,7 @@ for r in DATA["nvl"]:
 
 # ---------- layout ----------
 NAV = [("", "Trang chủ"), ("cau-chuyen/", "Câu chuyện"), ("san-pham/", "Sản phẩm"),
-       ("nguyen-lieu/", "Nguyên liệu sỉ"), ("dai-ly/", "Đại lý & sỉ"), ("chung-nhan/", "Chứng nhận"), ("lien-he/", "Liên hệ")]
+       ("nguyen-lieu/", "Nguyên liệu sỉ"), ("dai-ly/", "Đại lý & sỉ"), ("kien-thuc/", "Kiến thức"), ("chung-nhan/", "Chứng nhận"), ("lien-he/", "Liên hệ")]
 
 
 def page(path, title, desc, body, depth=0, og_img="img/anh/a45.jpg", jsonld=None, crumbs=None):
@@ -73,7 +73,7 @@ def page(path, title, desc, body, depth=0, og_img="img/anh/a45.jpg", jsonld=None
          "url": DOMAIN + "/", "logo": f"{DOMAIN}/img/logo-2.png", "telephone": "+84" + PHONE[1:],
          "address": {"@type": "PostalAddress", "streetAddress": "Số nhà 5, Tổ 1, Phường Đồng Quang",
                      "addressLocality": "Thái Nguyên", "addressCountry": "VN"},
-         "foundingDate": "2024-04-17"})]
+         "foundingDate": "2024-04-17", "areaServed": "VN", "contactPoint": {"@type": "ContactPoint", "telephone": "+84362771650", "contactType": "sales", "availableLanguage": "vi"}})]
     ld.append({"@context": "https://schema.org", "@type": "WebSite", "name": "Sinh Thái Việt", "url": DOMAIN + "/",
                "inLanguage": "vi"})
     if crumbs:
@@ -87,6 +87,7 @@ def page(path, title, desc, body, depth=0, og_img="img/anh/a45.jpg", jsonld=None
 <title>{e(title)}</title>
 <meta name="description" content="{e(desc)}">
 <link rel="canonical" href="{url}">
+<link rel="alternate" hreflang="vi-VN" href="{url}"><link rel="alternate" hreflang="x-default" href="{url}">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <meta name="theme-color" content="#C9922E">
 <link rel="icon" href="{rel}img/favicon.png" type="image/png">
@@ -119,14 +120,18 @@ def page(path, title, desc, body, depth=0, og_img="img/anh/a45.jpg", jsonld=None
 </body></html>"""
 
 
+SITE = []
+
+
 def write(path, content):
+    SITE.append(path)
     p = os.path.join(OUT, path, "index.html") if path else os.path.join(OUT, "index.html")
     os.makedirs(os.path.dirname(p), exist_ok=True)
     open(p, "w", encoding="utf-8").write(content)
 
 
 def img(src, alt, rel, w=600, h=600, cls="", lazy=True):
-    return f'<img src="{rel}{src}" alt="{e(alt)}" width="{w}" height="{h}" {"loading=lazy decoding=async" if lazy else "fetchpriority=high"} class="{cls}">'
+    return f'<img src="{rel}{wp(src)}" alt="{e(alt)}" width="{w}" height="{h}" {"loading=lazy decoding=async" if lazy else "fetchpriority=high"} class="{cls}">'
 
 
 def card(p, rel, kind):
@@ -134,7 +139,7 @@ def card(p, rel, kind):
     ph = "" if p["img"] else " ph"
     alt = f'{p["name"]} - {"nguyên liệu bánh tráng" if kind=="nvl" else "bánh tráng"} Sinh Thái Việt'
     return (f'<article class="card{ph}" data-cat="{e(p["cat"])}" data-name="{e(p["name"].lower())}">'
-            f'{img(src, alt, rel, 300, 300)}<div class="cb"><h3>{e(p["name"])}</h3>'
+            f'<a href="{rel}{p["url"]}" tabindex="-1" aria-hidden="true">{img(src, alt, rel, 300, 300)}</a><div class="cb"><h3><a href="{rel}{p["url"]}">{e(p["name"])}</a></h3>'
             f'<p class="un">Đơn vị: {e(p["unit"])}</p><p class="pr">{p["price"]}<small> giá bán lẻ tham khảo</small></p>'
             f'<a class="btn sm" href="https://zalo.me/{PHONE}" target="_blank" rel="noopener">Hỏi mua qua Zalo</a></div></article>')
 
@@ -146,7 +151,7 @@ def catalog(items, rel, kind):
     chips = '<button class="chip on" data-f="">Tất cả</button>' + "".join(
         f'<button class="chip" data-f="{e(c)}">{e(c)} <span>{sum(1 for p in items if p["cat"]==c)}</span></button>' for c in cats)
     grid = "".join(card(p, rel, kind) for p in items)
-    return (f'<div class="tools"><input id="q" type="search" placeholder="Tìm sản phẩm..." aria-label="Tìm sản phẩm"><div class="chips">{chips}</div></div>'
+    return (f'<h2 class="sr">Danh sách sản phẩm</h2><div class="tools"><input id="q" type="search" placeholder="Tìm sản phẩm..." aria-label="Tìm sản phẩm"><div class="chips">{chips}</div></div>'
             f'<div class="grid" id="grid">{grid}</div><p id="empty" class="muted" hidden>Không tìm thấy sản phẩm phù hợp.</p>')
 
 
@@ -193,8 +198,9 @@ def home():
 <section class="sec alt"><div class="wrap"><h2>Cung cấp nguyên liệu cho quán ăn vặt</h2>
 <p>Vỏ bánh tráng, sốt me – tắc – bò – ớt, khô bò, khô gà, mực cán, hành phi, tóp mỡ, bơ... đóng can, thùng hoặc theo kg. Có sẵn combo trộn, cuộn, nướng để mở quán nhanh.</p>
 <p><a class="btn" href="nguyen-lieu/">Xem bảng nguyên liệu</a></p></div></section>
+{home_extra()}
 """
-    write("", page("", "Bánh tráng trộn, đặc sản ăn vặt ISO 22000 | Sinh Thái Việt Thái Nguyên",
+    write("", page("", "Bánh tráng trộn Thái Nguyên: bán sỉ & lẻ, ISO 22000 | Sinh Thái Việt",
                    "Sinh Thái Việt: sản xuất, đóng gói, bán sỉ và lẻ bánh tráng trộn, khô bò, khô gà, mực, sốt và nguyên liệu cho quán ăn vặt. Đạt ISO 22000:2018. Hotline 0362 771 650.",
                    body, 0))
 
@@ -213,7 +219,7 @@ def story():
 </div></section>
 
 <section class="sec alt"><div class="wrap split">
-{img("img/anh/a23.jpg", "Bánh tráng trộn đóng túi hút chân không nhiều topping", "", 700, 700)}
+{img("img/anh/a23.jpg", "Bánh tráng trộn đóng túi hút chân không nhiều topping", "../", 700, 700)}
 <div><h2>Sản phẩm của chúng tôi gồm những gì?</h2><ul class="ticks">
 <li>Bánh tráng trộn, phơi sương, dẻo tôm đóng túi zip và hút chân không</li>
 <li>Set ăn vặt: set cuộn, set nướng, set me bơ, set tắc bơ, khay khô tứ vị</li>
@@ -372,6 +378,243 @@ cards=g.querySelectorAll('.card'),em=document.getElementById('empty');function r
 cards.forEach(function(c){var ok=(!f||c.dataset.cat===f)&&(!t||c.dataset.name.indexOf(t)>-1);c.hidden=!ok;if(ok)n++});em.hidden=n>0}
 q.addEventListener('input',run);cs.forEach(function(b){b.addEventListener('click',function(){cs.forEach(function(x){x.classList.remove('on')});b.classList.add('on');f=b.dataset.f;run()})})})();"""
 
+
+# =================== SEO MỞ RỘNG ===================
+SLUG_BT = {"Bánh tráng trộn, phơi sương & dẻo tôm": "banh-trang-tron", "Set & combo ăn vặt": "set-an-vat",
+           "Cơm cháy": "com-chay", "Khô & mực ăn liền": "kho-muc-an-lien",
+           "Sốt, topping & gia vị lọ": "sot-topping-gia-vi", "Bánh tráng hũ mix topping": "banh-trang-hu-mix"}
+SLUG_NVL = {"Combo nguyên liệu": "combo-mo-quan", "Sốt & dầu": "sot-dau", "Bánh tráng & vỏ cuộn": "vo-banh-trang",
+            "Khô, mực & chà bông": "kho-muc-cha-bong", "Topping, bơ & gia vị": "topping-bo-gia-vi"}
+
+CAT_INFO = {
+    "Bánh tráng trộn, phơi sương & dẻo tôm": dict(
+        h1="Bánh tráng trộn, phơi sương, dẻo tôm", title="Bánh tráng trộn, phơi sương, dẻo tôm giá sỉ & lẻ | Sinh Thái Việt",
+        desc="Bánh tráng trộn, bánh tráng phơi sương, dẻo tôm đóng túi zip, hút chân không, đủ topping và sốt. Đạt ISO 22000:2018. Bán lẻ, bán sỉ, làm đại lý.",
+        intro=["Bánh tráng trộn là món ăn vặt quen thuộc: sợi bánh tráng được tẩm vị, trộn cùng khô bò, khô gà, tóp mỡ, hành phi, đậu phộng và các loại sốt. Sinh Thái Việt đóng gói sẵn từng suất để khách mang đi, mở túi là ăn.",
+               "Nhóm này gồm bánh tráng tẩm vị, bánh tráng phơi sương, bánh tráng dẻo tôm và các bộ trộn kèm sốt. Mỗi sản phẩm được sản xuất và đóng gói theo hệ thống an toàn thực phẩm ISO 22000:2018."],
+        faq=[("Bánh tráng phơi sương khác bánh tráng dẻo tôm thế nào?", "Bánh tráng phơi sương có độ mềm dẻo đặc trưng, thường ăn kèm sốt và topping; bánh tráng dẻo tôm có vị tôm đặc trưng. Bạn có thể xem từng sản phẩm bên dưới để chọn."),
+             ("Mua sỉ bánh tráng trộn tối thiểu bao nhiêu?", "Giá sỉ áp dụng khi lấy từ 30 gói. Liên hệ Zalo 0362 771 650 để nhận bảng giá.")]),
+    "Set & combo ăn vặt": dict(
+        h1="Set & combo ăn vặt bánh tráng", title="Set ăn vặt bánh tráng: set cuộn, set nướng, set me bơ | Sinh Thái Việt",
+        desc="Set ăn vặt bánh tráng đóng sẵn: set cuộn, set nướng khay, set me bơ, set tắc bơ, khay khô tứ vị. Tiện làm quà, bán lẻ, bán đại lý.",
+        intro=["Set ăn vặt là các bộ sản phẩm được phối sẵn bánh tráng, sốt và topping, phù hợp làm quà, ăn nhóm hoặc bày bán tại cửa hàng.",
+               "Sinh Thái Việt có set cuộn, set nướng khay, set me bơ, set tắc bơ, set dẻo tôm và khay khô tứ vị. Tất cả đóng gói theo chuẩn ISO 22000:2018."],
+        faq=[("Set ăn vặt có làm quà được không?", "Có. Các set được phối sẵn, đóng gói gọn nên phù hợp biếu tặng hoặc bán kèm tại cửa hàng.")]),
+    "Cơm cháy": dict(
+        h1="Cơm cháy lắc topping các vị", title="Cơm cháy lắc topping túi zip, cơm cháy 5 vị 6 vị | Sinh Thái Việt",
+        desc="Cơm cháy lắc topping túi zip, cơm cháy 5 vị, 6 vị, cơm cháy mắm hành. Đóng gói chuẩn ISO 22000:2018, bán lẻ và bán sỉ cho đại lý.",
+        intro=["Cơm cháy giòn rụm, lắc cùng topping và sốt là món ăn vặt được nhiều khách trẻ yêu thích.",
+               "Sinh Thái Việt cung cấp cơm cháy lắc túi zip, cơm cháy 5 vị, 6 vị và cơm cháy mắm hành, đóng gói tiện lợi để bán lẻ hoặc nhập sỉ."],
+        faq=[("Cơm cháy có bán sỉ không?", "Có. Liên hệ Zalo 0362 771 650 để nhận giá đại lý và giá sỉ.")]),
+    "Khô & mực ăn liền": dict(
+        h1="Khô bò, khô gà, khô heo, mực ăn liền", title="Khô bò, khô gà lá chanh, khô heo cháy tỏi, mực cán 100g | Sinh Thái Việt",
+        desc="Khô bò sợi, khô bò miếng, khô gà lá chanh, khô heo cháy tỏi, mực cán, mực tẩm vị đóng gói 100g. Chuẩn ISO 22000:2018, giá bán lẻ và sỉ.",
+        intro=["Khô bò, khô gà, khô heo và mực là các món đồ nhắm, ăn vặt được đóng gói sẵn theo khối lượng 100g, tiện bán lẻ.",
+               "Sinh Thái Việt đóng gói khô bò sợi, khô bò miếng, khô gà lá chanh, khô heo cháy tỏi, mực cán và khô mực cốt dừa."],
+        faq=[("Có bán khô bò, khô gà theo cân không?", "Có. Xem thêm mục Nguyên liệu sỉ để xem khô bò, khô gà, mực theo kg và theo thùng.")]),
+    "Sốt, topping & gia vị lọ": dict(
+        h1="Sốt, topping & gia vị đóng lọ", title="Sốt me, sốt tắc, muối tép hành phi, tóp mỡ, chà bông lọ | Sinh Thái Việt",
+        desc="Sốt me, sốt tắc, sốt bò, sốt ớt, bơ vàng, muối tép hành phi, tóp mỡ, chà bông, rong biển đóng lọ. Bán lẻ, bán sỉ.",
+        intro=["Sốt và topping quyết định hương vị của bánh tráng trộn. Sinh Thái Việt đóng lọ sốt me, sốt tắc, sốt bò, sốt ớt, bơ vàng và nhiều loại topping.",
+               "Ngoài ra còn có muối tép hành phi, tóp mỡ, chà bông và rong biển tỏi đóng lọ, dùng ăn kèm hoặc làm quà."],
+        faq=[("Có bán sốt số lượng lớn không?", "Có. Sốt có dạng lọ, chai 1 lít và can 5 lít trong mục Nguyên liệu sỉ.")]),
+    "Bánh tráng hũ mix topping": dict(
+        h1="Bánh tráng hũ mix topping", title="Bánh tráng hũ mix mực, khô bò, khô gà, tóp mỡ | Sinh Thái Việt",
+        desc="Bánh tráng hũ mix mực cán, mực rim, khô bò, khô gà, tóp mỡ, hành phi. Hũ 100g và 200g. Chuẩn ISO 22000:2018, bán lẻ, bán sỉ.",
+        intro=["Bánh tráng đóng hũ mix topping là dòng sản phẩm cao cấp hơn, đóng hũ chắc chắn, thuận tiện làm quà và bày bán.",
+               "Có hai quy cách hũ 100g và 200g với các vị mực cán, mực rim, khô mực cốt dừa, khô bò, khô gà, tóp mỡ, hành và khô heo cháy tỏi."],
+        faq=[("Bánh tráng hũ có làm quà tặng được không?", "Có. Hũ đóng chắc chắn, phù hợp làm quà biếu và bán tại cửa hàng.")]),
+    "Combo nguyên liệu": dict(
+        h1="Combo nguyên liệu mở quán bánh tráng trộn", title="Combo nguyên liệu mở quán bánh tráng trộn, cuộn, nướng | Sinh Thái Việt",
+        desc="Combo nguyên liệu mở quán bánh tráng: combo trộn, combo cuộn, combo nướng, combo 3 trong 1. Giá sỉ, hỗ trợ tư vấn đại lý.",
+        intro=["Combo nguyên liệu giúp bạn mở quán nhanh: đã gồm vỏ, sốt, khô và topping cần thiết cho từng kiểu bán.",
+               "Có combo trộn, combo cuộn, combo nướng và combo 3 trong 1 để bán đủ ba món."],
+        faq=[("Mở quán bánh tráng trộn cần nhập gì?", "Cần vỏ bánh tráng, sốt, khô và topping. Combo đã gom các nguyên liệu này; liên hệ Zalo để được tư vấn theo vốn.")]),
+    "Sốt & dầu": dict(
+        h1="Sốt, sate, dầu tỏi bán sỉ", title="Sốt me, sốt tắc, sốt bò, sốt ớt, sate, dầu tỏi giá sỉ | Sinh Thái Việt",
+        desc="Sốt me, sốt tắc, sốt bò, sốt ớt dạng can 5 lít, chai 1 lít, túi nhỏ; sate, dầu tỏi. Nguyên liệu cho quán bánh tráng trộn.",
+        intro=["Sốt là nguyên liệu quan trọng của quán bánh tráng trộn. Có dạng can 5 lít, chai 1 lít và túi nhỏ dùng một lần.",
+               "Ngoài sốt còn có sate và dầu tỏi chai 1 lít."],
+        faq=[("Sốt có đóng gói túi nhỏ không?", "Có. Có túi 30g, 30ml, 35ml cho từng suất bán mang đi.")]),
+    "Bánh tráng & vỏ cuộn": dict(
+        h1="Vỏ bánh tráng, bánh tráng sợi, bánh tráng tẩm vị", title="Vỏ bánh tráng cuộn, vỏ nướng, bánh tráng sợi giá sỉ | Sinh Thái Việt",
+        desc="Vỏ bánh tráng cuộn, vỏ nướng, bánh tráng sợi trộn, bánh tráng phơi sương, dẻo tôm, bánh tráng tẩm vị bán theo kg.",
+        intro=["Vỏ bánh tráng và bánh tráng sợi là nguyên liệu nền cho các món trộn, cuộn, nướng.",
+               "Bán theo kg, phù hợp quán ăn vặt và đại lý."],
+        faq=[("Bánh tráng sợi có loại nào?", "Có bánh tráng sợi trộn 5 ly và 7 ly, bán theo kg.")]),
+    "Khô, mực & chà bông": dict(
+        h1="Khô bò, khô gà, mực, chà bông bán theo cân", title="Khô bò, khô gà, mực cán, chà bông giá sỉ theo kg, thùng | Sinh Thái Việt",
+        desc="Khô bò, khô gà, khô heo cháy tỏi, mực tẩm vị, mực cán, chà bông bán theo kg và thùng 5kg cho quán ăn vặt và đại lý.",
+        intro=["Nguyên liệu khô bán theo kg và thùng 5kg, dành cho quán bánh tráng trộn, cơ sở đóng gói và đại lý.",
+               "Gồm khô bò, khô bò miếng, khô gà, khô heo cháy tỏi, mực tẩm vị, mực cán, khô mực cốt dừa và chà bông."],
+        faq=[("Có bán thùng 5kg không?", "Có. Khô bò, khô gà, khô heo cháy tỏi, mực cán có quy cách thùng 5kg.")]),
+    "Topping, bơ & gia vị": dict(
+        h1="Topping, bơ, hành phi, tép sấy, gia vị", title="Hành sấy, tép sấy, bơ, tóp mỡ, rong biển, lạc rang giá sỉ | Sinh Thái Việt",
+        desc="Topping cho bánh tráng trộn: hành sấy, tép sấy, lạc rang, tóp mỡ, rong biển cháy tỏi, bơ thẻ, me thẻ, tắc thẻ, ớt thẻ, muối.",
+        intro=["Topping và gia vị tạo nên hương vị cho bánh tráng trộn: hành sấy, tép sấy, lạc rang, tóp mỡ, rong biển cháy tỏi.",
+               "Bơ, me, tắc, ớt dạng thẻ và các loại muối cũng có sẵn, bán theo kg."],
+        faq=[("Topping có bán lẻ theo kg không?", "Có. Phần lớn topping bán theo kg, một số theo thùng.")]),
+}
+
+def _expand(n):
+    n = re.sub(r"\bBT\b", "Bánh tráng", n)
+    return re.sub(r"\bDT\b", "Dẻo tôm", n)
+
+
+for _p in BT + NVL:
+    _p["name"] = _expand(_p["name"])
+_seen = set()
+for _items, _base, _sl in ((BT, "san-pham", SLUG_BT), (NVL, "nguyen-lieu", SLUG_NVL)):
+    for p in _items:
+        s = slug(p["name"]) or "san-pham"
+        while (_base, s) in _seen: s += "-2"
+        _seen.add((_base, s))
+        p["slug"] = s; p["cslug"] = _sl[p["cat"]]; p["url"] = f"{_base}/{p['cslug']}/{s}/"; p["base"] = _base
+
+
+def wp(src):
+    return re.sub(r"\.(jpe?g|png)$", ".webp", src) if src.startswith(("img/anh/", "img/sp/")) else src
+
+
+def cat_page(items, base, cat, sl):
+    info = CAT_INFO[cat]
+    its = [p for p in items if p["cat"] == cat]
+    grid = "".join(card(p, "../../", base) for p in its)
+    others = "".join(f'<a class="pill" href="../{sl[c]}/">{e(c)}</a>' for c in sl if c != cat)
+    faq = "".join(f"<details><summary>{e(q)}</summary><p>{e(a)}</p></details>" for q, a in info["faq"])
+    parent = ("Sản phẩm", "san-pham/") if base == "san-pham" else ("Nguyên liệu sỉ", "nguyen-lieu/")
+    body = f"""
+<section class="sec pagehead"><div class="wrap"><nav class="bc" aria-label="Breadcrumb"><a href="../../">Trang chủ</a> / <a href="../">{parent[0]}</a> / {e(cat)}</nav>
+<h1>{e(info["h1"])}</h1><p class="lead">{e(info["intro"][0])}</p></div></section>
+<section class="sec"><div class="wrap"><p class="narrow">{e(info["intro"][1])}</p>
+<h2>{len(its)} sản phẩm trong nhóm</h2><div class="grid">{grid}</div></div></section>
+<section class="sec alt"><div class="wrap narrow"><h2>Câu hỏi thường gặp</h2>{faq}
+<h2>Nhóm khác</h2><p class="pills">{others}</p>
+<p><a class="btn" href="https://zalo.me/{PHONE}" target="_blank" rel="noopener">Nhận báo giá qua Zalo {PHONE_FMT}</a></p></div></section>"""
+    faqld = {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [
+        {"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in info["faq"]]}
+    path = f"{base}/{sl[cat]}"
+    ogi = its[0]["img"] if its and its[0]["img"] else "img/anh/a45.jpg"
+    write(path, page(path + "/", info["title"], info["desc"], body, 2, ogi,
+                     jsonld=[itemlist(its, info["h1"], path + "/"), faqld],
+                     crumbs=[("Trang chủ", ""), parent, (cat, path + "/")]))
+
+
+def prod_page(p, items, sl):
+    cat = p["cat"]; base = p["base"]
+    related = [q for q in items if q["cat"] == cat and q is not p][:4]
+    rel_html = "".join(card(q, "../../../", base) for q in related)
+    kind = "nguyên liệu bánh tráng" if base == "nguyen-lieu" else "bánh tráng, đồ ăn vặt"
+    desc_txt = (f"{p['name']} thuộc nhóm {cat.lower()} của Sinh Thái Việt, đóng gói theo {p['unit'].lower()}, "
+                f"sản xuất và đóng gói theo hệ thống an toàn thực phẩm ISO 22000:2018. Giá bán lẻ khuyến nghị {p['price']}.")
+    src = p["img"] or "img/logo-2.png"
+    parent = ("Sản phẩm", "san-pham/") if base == "san-pham" else ("Nguyên liệu sỉ", "nguyen-lieu/")
+    body = f"""
+<section class="sec pagehead"><div class="wrap"><nav class="bc" aria-label="Breadcrumb"><a href="../../../">Trang chủ</a> / <a href="../../">{parent[0]}</a> / <a href="../">{e(cat)}</a> / {e(p["name"])}</nav></div></section>
+<section class="sec"><div class="wrap split top">
+{img(src, p["name"] + " - " + kind + " Sinh Thái Việt", "../../../", 600, 600, "" if p["img"] else "ph", lazy=False)}
+<div><h1>{e(p["name"])}</h1><p class="pr big">{p["price"]}<small> giá bán lẻ khuyến nghị / {e(p["unit"].lower())}</small></p>
+<p>{e(desc_txt)}</p><table class="tb"><tr><th>Nhóm</th><td><a href="../">{e(cat)}</a></td></tr><tr><th>Đơn vị</th><td>{e(p["unit"])}</td></tr>
+<tr><th>Thương hiệu</th><td>Sinh Thái Việt</td></tr><tr><th>Tiêu chuẩn</th><td>ISO 22000:2018 (số W2386F)</td></tr></table>
+<p><a class="btn" href="https://zalo.me/{PHONE}" target="_blank" rel="noopener">Đặt mua qua Zalo</a> <a class="btn ghost" href="../../../dai-ly/">Giá đại lý & sỉ</a></p></div></div></section>
+<section class="sec alt"><div class="wrap"><h2>Sản phẩm cùng nhóm</h2><div class="grid">{rel_html}</div></div></section>"""
+    price = p["raw"] or "0"
+    pld = {"@context": "https://schema.org", "@type": "Product", "name": p["name"], "description": desc_txt,
+           "image": f"{DOMAIN}/{p['img']}" if p["img"] else f"{DOMAIN}/img/logo-2.png", "category": cat,
+           "brand": {"@type": "Brand", "name": "Sinh Thái Việt"},
+           "manufacturer": {"@id": f"{DOMAIN}/#org"},
+           "offers": {"@type": "Offer", "priceCurrency": "VND", "price": price, "availability": "https://schema.org/InStock",
+                      "url": f"{DOMAIN}/{p['url']}", "seller": {"@id": f"{DOMAIN}/#org"}}}
+    title = f"{p['name']}{' (nguyên liệu sỉ)' if base == 'nguyen-lieu' else ''} - giá {p['price']} | Sinh Thái Việt"
+    d = f"{p['name']} giá {p['price']}/{p['unit'].lower()}, {cat.lower()} Sinh Thái Việt đạt ISO 22000:2018. Mua lẻ, mua sỉ, làm đại lý. Zalo {PHONE_FMT}."
+    write(p["url"].rstrip("/"), page(p["url"], title, d[:300], body, 3, p["img"] or "img/anh/a45.jpg", jsonld=[pld],
+                                      crumbs=[("Trang chủ", ""), parent, (cat, f"{base}/{p['cslug']}/"), (p["name"], p["url"])]))
+
+
+ARTICLES = [
+    dict(slug="banh-trang-tron-gom-nhung-gi", title="Bánh tráng trộn gồm những gì? Cách trộn và các loại topping",
+         desc="Bánh tráng trộn gồm bánh tráng sợi, khô bò, khô gà, tóp mỡ, hành phi, đậu phộng và sốt. Tìm hiểu thành phần, cách trộn và các vị phổ biến.",
+         body="""<p>Bánh tráng trộn là món ăn vặt phổ biến, được làm từ bánh tráng cắt sợi tẩm vị, trộn cùng nhiều loại topping và sốt. Mỗi vùng, mỗi quán có công thức riêng, nhưng các thành phần chính khá giống nhau.</p>
+<h2>Thành phần chính của bánh tráng trộn</h2><ul><li><strong>Bánh tráng:</strong> sợi trộn, bánh tráng tẩm vị, phơi sương hoặc dẻo tôm.</li><li><strong>Đồ khô:</strong> khô bò, khô gà lá chanh, khô heo cháy tỏi, mực.</li><li><strong>Topping:</strong> tóp mỡ, hành phi, tép sấy, đậu phộng, rong biển, chà bông.</li><li><strong>Sốt và gia vị:</strong> sốt me, sốt tắc, sốt bò, sốt ớt, bơ, muối tép.</li></ul>
+<h2>Cách trộn cơ bản</h2><p>Cho bánh tráng vào bát hoặc túi, thêm sốt theo khẩu vị rồi trộn đều cho bánh thấm. Sau đó thêm đồ khô và topping, trộn nhẹ tay để không làm vụn. Thưởng thức ngay để giữ độ giòn và dai.</p>
+<h2>Các vị được ưa chuộng</h2><p>Các vị hay gặp gồm sate bò, me bơ, tắc bơ, bơ ngũ vị, phô mai, gà sốt me cay và lá bò lục vị. Bạn có thể xem toàn bộ danh mục tại <a href="../../san-pham/banh-trang-tron/">bánh tráng trộn, phơi sương, dẻo tôm</a> của Sinh Thái Việt.</p>"""),
+    dict(slug="mo-quan-banh-trang-tron-can-nhung-gi", title="Mở quán bánh tráng trộn cần chuẩn bị nguyên liệu gì?",
+         desc="Danh sách nguyên liệu cần có khi mở quán bánh tráng trộn: vỏ bánh tráng, sốt, khô bò, mực, topping và combo nhập sỉ tiết kiệm.",
+         body="""<p>Quán bánh tráng trộn có vốn ban đầu nhỏ và dễ bắt đầu, nhưng nguyên liệu cần ổn định về chất lượng và nguồn nhập. Dưới đây là danh sách cơ bản.</p>
+<h2>Nhóm nguyên liệu bắt buộc</h2><ul><li>Bánh tráng sợi, vỏ cuộn, vỏ nướng.</li><li>Sốt me, tắc, bò, ớt, bơ.</li><li>Khô bò, khô gà, khô heo cháy tỏi, mực.</li><li>Topping: hành phi, tép sấy, lạc rang, tóp mỡ, rong biển.</li><li>Bao bì: túi, hộp, thìa.</li></ul>
+<h2>Nhập theo combo để tiết kiệm</h2><p>Nếu mới bắt đầu, bạn có thể chọn combo trộn, combo cuộn, combo nướng hoặc combo 3 trong 1 để có đủ nguyên liệu cho từng kiểu bán. Xem tại <a href="../../nguyen-lieu/combo-mo-quan/">combo nguyên liệu mở quán</a>.</p>
+<h2>Chọn nhà cung cấp</h2><p>Nên chọn đơn vị có chứng nhận an toàn thực phẩm và bảng giá rõ ràng cho từng mức số lượng. Sinh Thái Việt có <a href="../../dai-ly/">chính sách đại lý và giá sỉ</a> theo ba mức, kèm giá bán lẻ khuyến nghị để bạn tính lợi nhuận.</p>"""),
+    dict(slug="iso-22000-2018-la-gi", title="ISO 22000:2018 là gì? Vì sao quan trọng với đồ ăn vặt đóng gói",
+         desc="ISO 22000:2018 là tiêu chuẩn hệ thống quản lý an toàn thực phẩm. Tìm hiểu ý nghĩa và vì sao nên chọn nhà cung cấp bánh tráng có chứng nhận.",
+         body="""<p>ISO 22000:2018 là tiêu chuẩn quốc tế về hệ thống quản lý an toàn thực phẩm, áp dụng cho các tổ chức trong chuỗi cung ứng thực phẩm.</p>
+<h2>Tiêu chuẩn này yêu cầu gì?</h2><p>Tổ chức phải nhận diện mối nguy an toàn thực phẩm, kiểm soát quy trình sản xuất và đóng gói, ghi chép hồ sơ và cải tiến liên tục. Chứng nhận được đánh giá giám sát định kỳ.</p>
+<h2>Lợi ích với người mua và đại lý</h2><ul><li>Quy trình sản xuất được kiểm soát và có hồ sơ.</li><li>Dễ tạo niềm tin với khách hàng cuối.</li><li>Thuận lợi khi làm việc với siêu thị, cửa hàng, đại lý.</li></ul>
+<h2>Sinh Thái Việt đạt chứng nhận</h2><p>Hợp tác xã Đầu tư Sinh Thái Việt được Công ty Cổ phần Chứng nhận WCERT cấp chứng nhận ISO 22000:2018 số W2386F, hiệu lực 11/7/2025 đến 10/7/2028, cho hoạt động sản xuất, đóng gói, kinh doanh sản phẩm từ bánh tráng. Xem <a href="../../chung-nhan/">giấy chứng nhận</a>.</p>"""),
+    dict(slug="cach-bao-quan-banh-trang-tron-kho-bo", title="Cách bảo quản bánh tráng trộn, khô bò, khô gà đúng cách",
+         desc="Hướng dẫn bảo quản bánh tráng trộn, khô bò, khô gà, mực: nơi khô ráo, tránh nắng, đóng kín sau khi mở và lưu ý khi bán hàng.",
+         body="""<p>Bảo quản đúng cách giúp bánh tráng, khô và sốt giữ hương vị lâu hơn. Hãy ưu tiên làm theo hướng dẫn in trên bao bì của từng sản phẩm.</p>
+<h2>Nguyên tắc chung</h2><ul><li>Để nơi khô ráo, thoáng mát, tránh ánh nắng trực tiếp.</li><li>Đóng kín túi zip hoặc hũ sau khi mở.</li><li>Không để sản phẩm tiếp xúc nước hoặc hơi ẩm.</li><li>Dùng thìa, dụng cụ sạch khi lấy sản phẩm.</li></ul>
+<h2>Với sốt và topping</h2><p>Sốt nên đậy kín, để nơi mát. Topping như hành phi, tóp mỡ nên đóng kín để giữ độ giòn.</p>
+<h2>Với đại lý và quán</h2><p>Nhập số lượng vừa đủ, xoay vòng hàng theo nguyên tắc nhập trước bán trước. Xem thêm <a href="../../nguyen-lieu/">nguyên liệu sỉ</a> của Sinh Thái Việt.</p>"""),
+]
+
+
+def articles():
+    cards = "".join(f'<article class="box"><h2><a href="{a["slug"]}/">{e(a["title"])}</a></h2><p>{e(a["desc"])}</p><a href="{a["slug"]}/">Đọc tiếp</a></article>' for a in ARTICLES)
+    body = f"""<section class="sec pagehead"><div class="wrap"><nav class="bc" aria-label="Breadcrumb"><a href="../">Trang chủ</a> / Kiến thức</nav>
+<h1>Kiến thức bánh tráng trộn &amp; kinh doanh đồ ăn vặt</h1><p class="lead">Hướng dẫn mở quán, chọn nguyên liệu, bảo quản và tiêu chuẩn an toàn thực phẩm.</p></div></section>
+<section class="sec"><div class="wrap cols3">{cards}</div></section>"""
+    write("kien-thuc", page("kien-thuc/", "Kiến thức bánh tráng trộn, mở quán ăn vặt | Sinh Thái Việt",
+                            "Bài viết về bánh tráng trộn, nguyên liệu mở quán, tiêu chuẩn ISO 22000:2018 và cách bảo quản đồ ăn vặt từ Sinh Thái Việt.",
+                            body, 1, crumbs=[("Trang chủ", ""), ("Kiến thức", "kien-thuc/")]))
+    for a in ARTICLES:
+        path = f"kien-thuc/{a['slug']}"
+        b = f"""<section class="sec pagehead"><div class="wrap narrow"><nav class="bc" aria-label="Breadcrumb"><a href="../../">Trang chủ</a> / <a href="../">Kiến thức</a> / {e(a["title"])}</nav>
+<h1>{e(a["title"])}</h1><p class="muted">Sinh Thái Việt · Cập nhật {TODAY}</p></div></section>
+<section class="sec"><div class="wrap narrow article">{a["body"]}<p><a class="btn" href="https://zalo.me/{PHONE}" target="_blank" rel="noopener">Tư vấn qua Zalo {PHONE_FMT}</a></p></div></section>"""
+        ld = {"@context": "https://schema.org", "@type": "Article", "headline": a["title"], "description": a["desc"],
+              "datePublished": TODAY, "dateModified": TODAY, "inLanguage": "vi",
+              "author": {"@id": f"{DOMAIN}/#org"}, "publisher": {"@id": f"{DOMAIN}/#org"},
+              "mainEntityOfPage": f"{DOMAIN}/{path}/", "image": f"{DOMAIN}/img/anh/a45.jpg"}
+        write(path, page(path + "/", a["title"] + " | Sinh Thái Việt", a["desc"], b, 2, jsonld=[ld],
+                         crumbs=[("Trang chủ", ""), ("Kiến thức", "kien-thuc/"), (a["title"], path + "/")]))
+
+
+def home_extra():
+    cats = "".join(f'<a class="box" href="san-pham/{SLUG_BT[c]}/"><h3>{e(CAT_INFO[c]["h1"])}</h3><p>{sum(1 for p in BT if p["cat"]==c)} sản phẩm</p></a>' for c in SLUG_BT)
+    faqs = [("Sinh Thái Việt bán những sản phẩm gì?", "Bánh tráng trộn, phơi sương, dẻo tôm, cơm cháy, khô bò, khô gà, mực, sốt, topping, set ăn vặt và nguyên liệu bán sỉ cho quán."),
+            ("Sản phẩm có đạt chuẩn an toàn thực phẩm không?", "Có. Hợp tác xã được cấp chứng nhận ISO 22000:2018 số W2386F, hiệu lực đến 10/7/2028."),
+            ("Làm sao để làm đại lý hoặc mua sỉ?", "Liên hệ Zalo 0362 771 650 để nhận bảng giá. Giá sỉ áp dụng từ 30 gói."),
+            ("Sinh Thái Việt ở đâu?", "Trụ sở tại Phường Đồng Quang, thành phố Thái Nguyên; cơ sở sản xuất tại phường Hòa Bình, tỉnh Hòa Bình.")]
+    fh = "".join(f"<details><summary>{e(q)}</summary><p>{e(a)}</p></details>" for q, a in faqs)
+    return (f'<section class="sec"><div class="wrap"><h2>Danh mục sản phẩm</h2><div class="cols3 linkbox">{cats}</div></div></section>'
+            f'<section class="sec alt"><div class="wrap narrow"><h2>Câu hỏi thường gặp</h2>{fh}'
+            f'<p><a href="kien-thuc/">Xem thêm bài viết kiến thức</a></p></div></section>'
+            f'<script type="application/ld+json">{json.dumps({"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":q,"acceptedAnswer":{"@type":"Answer","text":a}} for q,a in faqs]}, ensure_ascii=False)}</script>')
+
+
+EXTRA_CSS = """
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.cb h3 a{color:inherit;text-decoration:none}.cb h3 a:hover{color:var(--gold-d)}
+.pills{display:flex;flex-wrap:wrap;gap:8px}.pill{border:1px solid var(--gold);border-radius:999px;padding:6px 14px;text-decoration:none;font-size:.9rem;background:#fff}
+.linkbox a{text-decoration:none;color:var(--ink)}.linkbox a:hover{border-color:var(--gold)}.linkbox p{margin:0;color:var(--muted)}
+.article h2{margin-top:1.6em}.article li{margin:.4em 0}.cols3 .box h2{font-size:1.15rem}.cols3 .box h2 a{text-decoration:none;color:var(--ink)}
+.bc a{color:var(--muted)}.split.top>img{max-height:none}
+"""
+CSS += EXTRA_CSS
+
+
+def to_webp():
+    from PIL import Image
+    for d in ("img/anh", "img/sp"):
+        full = os.path.join(OUT, d)
+        for f in os.listdir(full):
+            if f.lower().endswith((".jpg", ".jpeg", ".png")):
+                im = Image.open(os.path.join(full, f)).convert("RGB")
+                im.thumbnail((1000, 1000))
+                im.save(os.path.join(full, os.path.splitext(f)[0] + ".webp"), "WEBP", quality=78, method=6)
+
+
 if __name__ == "__main__":
     if os.path.exists(OUT): shutil.rmtree(OUT)
     os.makedirs(OUT)
@@ -379,11 +622,19 @@ if __name__ == "__main__":
         shutil.copytree(os.path.join(ROOT, d), os.path.join(OUT, d))
     open(os.path.join(OUT, "style.css"), "w").write(CSS)
     open(os.path.join(OUT, "app.js"), "w").write(JS)
-    home(); story(); products(); materials(); dealer(); certs(); contact()
-    pages = ["", "cau-chuyen/", "san-pham/", "nguyen-lieu/", "dai-ly/", "chung-nhan/", "lien-he/"]
+    to_webp()
+    home(); story(); products(); materials(); dealer(); certs(); contact(); articles()
+    for c in SLUG_BT: cat_page(BT, "san-pham", c, SLUG_BT)
+    for c in SLUG_NVL: cat_page(NVL, "nguyen-lieu", c, SLUG_NVL)
+    for p in BT: prod_page(p, BT, SLUG_BT)
+    for p in NVL: prod_page(p, NVL, SLUG_NVL)
+    pages = sorted(set(("" if x == "" else x.rstrip("/") + "/") for x in SITE))
+    open(os.path.join(OUT, "llms.txt"), "w", encoding="utf-8").write(
+        "# Sinh Thái Việt\n> Hợp tác xã Đầu tư Sinh Thái Việt (Thái Nguyên): sản xuất, đóng gói, kinh doanh bánh tráng trộn, khô, sốt, nguyên liệu sỉ. ISO 22000:2018 số W2386F.\n\n"
+        + "\n".join(f"- {DOMAIN}/{x}" for x in pages if x.count("/") <= 2) + "\n")
     open(os.path.join(OUT, "sitemap.xml"), "w").write(
         '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' +
-        "".join(f"<url><loc>{DOMAIN}/{p}</loc><lastmod>{TODAY}</lastmod><priority>{'1.0' if not p else '0.8'}</priority></url>" for p in pages) + "</urlset>")
+        "".join(f"<url><loc>{DOMAIN}/{p}</loc><lastmod>{TODAY}</lastmod><priority>{'1.0' if not p else ('0.8' if p.count('/') <= 1 else '0.6')}</priority></url>" for p in pages) + "</urlset>")
     open(os.path.join(OUT, "robots.txt"), "w").write(f"User-agent: *\nAllow: /\nSitemap: {DOMAIN}/sitemap.xml\n")
     open(os.path.join(OUT, "404.html"), "w", encoding="utf-8").write(
         page("404.html", "Không tìm thấy trang | Sinh Thái Việt", "Trang không tồn tại.",

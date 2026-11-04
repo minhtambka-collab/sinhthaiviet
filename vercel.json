@@ -1,2 +1,2 @@
-{ "outputDirectory": "dist", "framework": null, "buildCommand": "", "headers": [
+{ "outputDirectory": "dist", "trailingSlash": true, "framework": null, "buildCommand": "", "headers": [
   { "source": "/img/(.*)", "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }] } ] }
