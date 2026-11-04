@@ -48,7 +48,7 @@ def cat_nvl(n):
 
 
 # ---------- dữ liệu sản phẩm ----------
-NEWIMG = {20:103,64:102,65:107,67:104,12:109,13:111,69:105,70:108,71:108,72:110,48:112,53:113,46:114,47:116,14:115,
+NEWIMG = {20:103,64:139,65:138,67:104,12:137,13:111,69:105,70:108,71:108,72:136,48:112,53:113,46:114,47:116,14:115,
           44:131,45:132,15:118,56:118,19:130,37:124,41:119,2:120,10:120,8:121,11:121,4:122,7:125,66:125,36:123,43:123,
           55:126,38:127,3:127,40:128,54:128,42:129,34:129}
 BT = []
@@ -66,7 +66,7 @@ NAV = [("", "Trang chủ"), ("cau-chuyen/", "Câu chuyện"), ("san-pham/", "S�
        ("nguyen-lieu/", "Nguyên liệu sỉ"), ("dai-ly/", "Đại lý & sỉ"), ("kien-thuc/", "Kiến thức"), ("chung-nhan/", "Chứng nhận"), ("lien-he/", "Liên hệ")]
 
 
-def page(path, title, desc, body, depth=0, og_img="img/anh/b102.jpg", jsonld=None, crumbs=None):
+def page(path, title, desc, body, depth=0, og_img="img/anh/b139.jpg", jsonld=None, crumbs=None):
     rel = "../" * depth
     url = f"{DOMAIN}/{path}"
     nav = "".join(
@@ -177,7 +177,7 @@ def home():
     def tile(cls, href, im, t, sub, alt):
         return (f'<a class="tile {cls}" href="{href}"><span class="tt"><b>{t}</b><small>{sub}</small><i>Xem ngay &rarr;</i></span>'
                 f'{img(im, alt, "", 420, 420)}</a>')
-    tiles = (tile("t-red", "san-pham/banh-trang-tron/", "img/anh/b102.jpg", "Ăn liền", "Mở túi là có, đủ topping", "Bánh tráng trộn saté bò ngũ vị")
+    tiles = (tile("t-red", "san-pham/banh-trang-tron/", "img/anh/b136.jpg", "Ăn liền", "Mở túi là có, đủ topping", "Bánh tráng trộn tỏi thơm bò cay")
              + tile("t-grn", "san-pham/set-an-vat/", "img/anh/b129.jpg", "Tự trộn tại nhà", "Set vỏ, sốt, topping riêng", "Bánh tráng bơ me Sinh Thái Việt")
              + tile("t-yel", "san-pham/set-an-vat/", "img/anh/b122.jpg", "Set &amp; combo", "Quà ăn vặt, tụ tập bạn bè", "Set dẻo tôm bơ chà bông")
              + tile("t-ora", "san-pham/sot-topping-gia-vi/", "img/anh/b119.jpg", "Sốt &amp; topping", "Me, tắc, ớt rim, tóp mỡ", "Bánh tráng tóp mỡ hành phi"))
@@ -195,9 +195,9 @@ def home():
 <p class="cta"><a class="btn y" href="san-pham/">Chọn vị ngay</a><a class="btn w" href="dai-ly/">Làm đại lý / mua sỉ</a></p>
 <ul class="badges2"><li>ISO 22000:2018</li><li>{len(BT)}+ sản phẩm</li><li>{len(NVL)}+ nguyên liệu sỉ</li><li>Không chất bảo quản</li></ul>
 </div><div class="h2pic">
-{img("img/anh/b102.jpg", "Bánh tráng trộn sate bò ngũ vị Sinh Thái Việt", "", 700, 700, "m", lazy=False)}
-{img("img/anh/b107.jpg", "Bánh tráng trộn gà sốt me cay", "", 300, 300, "s1")}
-{img("img/anh/b105.jpg", "Bánh tráng trộn phô mai chà bông", "", 300, 300, "s2")}
+{img("img/anh/b139.jpg", "Bánh tráng trộn saté bò ngũ vị Sinh Thái Việt", "", 700, 700, "m", lazy=False)}
+{img("img/anh/b138.jpg", "Bánh tráng trộn gà sốt me cay", "", 300, 300, "s1")}
+{img("img/anh/b137.jpg", "Bánh tráng trộn phô mai gà cay", "", 300, 300, "s2")}
 </div></div><svg class="wave" viewBox="0 0 1440 60" preserveAspectRatio="none" aria-hidden="true"><path d="M0,30 C240,70 480,0 720,30 C960,60 1200,10 1440,30 L1440,60 L0,60 Z" fill="#FFF3C4"/></svg></section>
 
 <div class="mq" aria-label="Các vị bánh tráng"><div class="mq-in">{mq}{mq}</div></div>
@@ -519,8 +519,8 @@ def wp(src):
 
 
 # =========== ẢNH SẢN PHẨM THEO NHÓM ===========
-G_TRON = [(102,"Bánh tráng trộn saté bò ngũ vị cao cấp"),(107,"Bánh tráng trộn gà sốt me cay"),(109,"Bánh tráng trộn phô mai gà cay"),
- (108,"Bánh tráng trộn lá bò lục vị"),(110,"Bánh tráng trộn tỏi thơm bò cay"),(104,"Bánh tráng trộn hải sản cao cấp"),
+G_TRON = [(139,"Bánh tráng trộn saté bò ngũ vị cao cấp, ăn kèm đĩa trộn"),(138,"Bánh tráng trộn gà sốt me cay, ăn kèm đĩa trộn"),(137,"Bánh tráng trộn phô mai gà cay, ăn kèm đĩa trộn"),(136,"Bánh tráng trộn tỏi thơm bò cay, ăn kèm đĩa trộn"),(102,"Bánh tráng trộn saté bò ngũ vị cao cấp"),(107,"Bánh tráng trộn gà sốt me cay"),(109,"Bánh tráng trộn phô mai gà cay"),
+ (108,"Bánh tráng trộn lá bò lục vị"),(110,"Bánh tráng trộn tỏi thơm bò cay túi zip"),(104,"Bánh tráng trộn hải sản cao cấp"),
  (105,"Bánh tráng trộn phô mai chà bông"),(106,"Bánh tráng trộn mật chà chà bông"),(111,"Bánh tráng trộn saté me khô mực"),
  (132,"Bánh tráng trộn thập cẩm cao cấp"),(131,"Bánh tráng trộn túi zip 200g"),(112,"Bánh tráng xì ke vị đặc biệt"),
  (113,"Bánh tráng Luxury hút chân không"),(114,"Bánh tráng trộn hút chân không"),(116,"Bánh tráng trộn Vip"),
