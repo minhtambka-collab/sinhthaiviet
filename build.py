@@ -7,6 +7,8 @@ OUT = os.path.join(ROOT, "dist")
 DOMAIN = "https://sinhthaiviet.vn"
 PHONE = "0362771650"
 PHONE_FMT = "0362 771 650"
+HOTLINE = "0988771330"
+HOTLINE_FMT = "0988 771 330"
 ADDR = "Số nhà 5, Tổ 1, Phường Đồng Quang, TP. Thái Nguyên"
 NAME = "Hợp tác xã Đầu tư Sinh Thái Việt"
 TODAY = datetime.date.today().isoformat()
@@ -54,7 +56,7 @@ NEWIMG = {20:103,64:139,65:138,67:104,12:137,13:111,69:105,70:108,71:108,72:136,
 BT = []
 for r in DATA["bt"]:
     _n = NEWIMG.get(int(r["stt"])) if r["name"] != "Khô mực cốt dừa 100g" else None
-    BT.append(dict(name=r["name"], unit=r["unit"], price=money(r["retail"]), raw=re.sub(r"\D", "", r["retail"]),
+    BT.append(dict(stt=r["stt"], name=r["name"], unit=r["unit"], price=money(r["retail"]), raw=re.sub(r"\D", "", r["retail"]),
                    img=(f"img/anh/b{_n}.jpg" if _n else (("img/sp/" + r["img"]) if r["img"] else None)), cat=cat_bt(r["name"])))
 NVL = []
 for r in DATA["nvl"]:
@@ -63,7 +65,7 @@ for r in DATA["nvl"]:
 
 # ---------- layout ----------
 NAV = [("", "Trang chủ"), ("cau-chuyen/", "Câu chuyện"), ("san-pham/", "Sản phẩm"),
-       ("nguyen-lieu/", "Nguyên liệu sỉ"), ("dai-ly/", "Đại lý & sỉ"), ("kien-thuc/", "Kiến thức"), ("chung-nhan/", "Chứng nhận"), ("lien-he/", "Liên hệ")]
+       ("nguyen-lieu/", "Nguyên liệu sỉ"), ("dai-ly/", "Đại lý & sỉ"), ("xuong-san-xuat/", "Xưởng"), ("kien-thuc/", "Kiến thức"), ("chung-nhan/", "Chứng nhận"), ("lien-he/", "Liên hệ")]
 
 
 def page(path, title, desc, body, depth=0, og_img="img/anh/b139.jpg", jsonld=None, crumbs=None):
@@ -116,10 +118,10 @@ def page(path, title, desc, body, depth=0, og_img="img/anh/b139.jpg", jsonld=Non
 <div><img src="{rel}img/logo-2.png" width="64" height="64" alt="" loading="lazy"><h2>{NAME}</h2>
 <p>Sản xuất, đóng gói, kinh doanh các sản phẩm từ bánh tráng. Hệ thống quản lý an toàn thực phẩm ISO 22000:2018.</p></div>
 <div><h3>Liên hệ</h3><p>Trụ sở: {ADDR}</p><p>Cơ sở sản xuất: Tòa B, chung cư Sao Vàng, phường Hòa Bình, tỉnh Hòa Bình</p>
-<p>Điện thoại / Zalo: <a href="tel:{PHONE}">{PHONE_FMT}</a></p></div>
+<p>Zalo sỉ: <a href="tel:{PHONE}">{PHONE_FMT}</a></p><p>Hotline: <a href="tel:{HOTLINE}">{HOTLINE_FMT}</a></p></div>
 <div><h3>Khám phá</h3>{"".join(f'<p><a href="{rel}{h}">{t}</a></p>' for h, t in NAV[1:])}</div>
 </div><div class="wrap copy">© {datetime.date.today().year} {NAME}. Mã số hợp tác xã 4601617683.</div></footer>
-<a class="zalo" href="https://zalo.me/{PHONE}" rel="noopener" target="_blank" aria-label="Chat Zalo">Zalo</a>
+<a class="callfab" href="tel:{HOTLINE}" aria-label="Gọi hotline {HOTLINE_FMT}">&#9742;</a><a class="zalo" href="https://zalo.me/{PHONE}" rel="noopener" target="_blank" aria-label="Chat Zalo">Zalo</a>
 <script src="{rel}app.js" defer></script>
 </body></html>"""
 
@@ -325,18 +327,70 @@ def dealer():
     body = f"""
 <section class="sec pagehead"><div class="wrap"><nav class="bc" aria-label="Breadcrumb"><a href="../">Trang chủ</a> / Đại lý &amp; sỉ</nav>
 <h1>Làm đại lý &amp; mua sỉ bánh tráng Sinh Thái Việt</h1>
-<p class="lead">Ba mức chính sách giá rõ ràng, sản phẩm có chứng nhận ISO 22000:2018, hỗ trợ tư vấn lên kế hoạch kinh doanh.</p></div></section>
+<p class="lead">Ba mức chính sách giá rõ ràng, sản phẩm có chứng nhận ISO 22000:2018, hỗ trợ hình ảnh, setup điểm bán và đào tạo kinh doanh.</p></div></section>
 <section class="sec"><div class="wrap"><div class="cols3">
 <div class="box hl"><h3>Đại lý chiến lược</h3><p class="big">Doanh số từ 10 triệu/tháng</p><p>Mức giá tốt nhất, ưu tiên hàng mới và hỗ trợ hình ảnh bán hàng.</p></div>
 <div class="box"><h3>Đại lý</h3><p class="big">Doanh số từ 3 triệu/tháng</p><p>Giá đại lý ổn định, phù hợp cửa hàng tạp hóa, quán ăn vặt, bán online.</p></div>
 <div class="box"><h3>Giá sỉ</h3><p class="big">Lấy từ 30 gói</p><p>Dành cho khách mua số lượng, chưa cam kết doanh số tháng.</p></div></div>
-<p class="center"><a class="btn" href="https://zalo.me/{PHONE}" target="_blank" rel="noopener">Nhận bảng giá qua Zalo {PHONE_FMT}</a></p></div></section>
+<p class="center"><a class="btn" href="#bao-gia">Nhận báo giá sỉ</a> <a class="btn ghost" href="tel:{HOTLINE}">Gọi {HOTLINE_FMT}</a></p></div></section>
+
+<section class="sec cream"><div class="wrap"><h2 class="sh">Đại lý nhận được <em>gì từ HTX?</em></h2>
+<p class="muted center">Không chỉ là giá tốt. HTX đồng hành để điểm bán của bạn chạy được ngay.</p>
+<div class="cols3 perks">
+<div class="box why"><span class="ic">&#127970;</span><h3>Nguồn hàng từ xưởng</h3><p>Sản xuất và đóng gói tại cơ sở của HTX theo ISO 22000:2018, không qua trung gian, giao hàng toàn quốc.</p></div>
+<div class="box why"><span class="ic">&#127912;</span><h3>Nhận diện &amp; hình ảnh</h3><p>Hỗ trợ hình ảnh sản phẩm và tài liệu bán hàng để đăng bài, trưng bày tại điểm bán.</p></div>
+<div class="box why"><span class="ic">&#128717;</span><h3>Setup điểm bán</h3><p>Tư vấn chọn mặt hàng, cách bày kệ hoặc lên menu cho quán ăn vặt, tạp hóa, cửa hàng online.</p></div>
+<div class="box why"><span class="ic">&#128218;</span><h3>Đào tạo kinh doanh</h3><p>Hướng dẫn công thức pha trộn, cách bán và cách tính giá để người mới cũng bắt đầu được.</p></div>
+<div class="box why"><span class="ic">&#128640;</span><h3>Ưu tiên hàng mới</h3><p>Đại lý chiến lược được báo trước sản phẩm mới và hưởng mức giá tốt nhất trong chính sách.</p></div>
+<div class="box why"><span class="ic">&#129309;</span><h3>Tư vấn 1-1</h3><p>Một đầu mối tư vấn riêng qua Zalo và điện thoại, hỗ trợ lâu dài sau khi nhập hàng.</p></div></div></div></section>
+
+<section class="sec"><div class="wrap split top"><div><h2>Dành cho siêu thị &amp; chuỗi cửa hàng</h2>
+<p>Bánh tráng trộn, snack và topping đóng túi zip, hút chân không, sẵn sàng lên kệ. Chúng tôi tư vấn riêng cho siêu thị, cửa hàng tiện lợi và chuỗi bán lẻ:</p>
+<ul class="ticks"><li>Danh mục sản phẩm gợi ý theo diện tích kệ và nhóm khách của điểm bán</li><li>Báo giá riêng theo số lượng và chu kỳ nhập hàng</li><li>Hồ sơ pháp lý, chứng nhận ISO 22000:2018 số W2386F để làm hồ sơ nhà cung cấp</li><li>Giao hàng theo đợt, đóng gói thùng gọn cho vận chuyển</li></ul>
+<p><a class="btn" href="#bao-gia">Gửi yêu cầu báo giá</a></p></div>
+{img("img/anh/c05.jpg", "Kệ bánh tráng và đồ ăn vặt Sinh Thái Việt tại điểm bán", "../", 600, 450)}</div></section>
+
+<section class="sec alt" id="bao-gia"><div class="wrap narrow"><h2 class="sh">Nhận <em>báo giá sỉ</em></h2>
+<p class="muted center">Điền thông tin, bấm gửi: nội dung được chép sẵn và mở Zalo để gửi tới bộ phận kinh doanh.</p>
+<form class="qf" id="qf" novalidate>
+<label>Họ tên<input name="ten" required autocomplete="name"></label>
+<label>Số điện thoại / Zalo<input name="sdt" type="tel" required autocomplete="tel"></label>
+<label>Bạn là<select name="loai"><option>Đại lý chiến lược</option><option>Đại lý</option><option>Siêu thị / chuỗi cửa hàng</option><option>Quán ăn vặt</option><option>Bán online</option><option>Khác</option></select></label>
+<label>Tỉnh / thành<input name="tinh" autocomplete="address-level1"></label>
+<label class="full">Sản phẩm quan tâm và số lượng dự kiến<textarea name="nd" rows="3" placeholder="Ví dụ: bánh tráng trộn túi zip 50 gói, sốt me can 5 lít..."></textarea></label>
+<p class="full cta" style="margin:0"><button class="btn" type="submit">Gửi yêu cầu qua Zalo</button><a class="btn ghost" href="tel:{HOTLINE}">Hoặc gọi {HOTLINE_FMT}</a><a class="btn ghost" href="https://zalo.me/{PHONE}" target="_blank" rel="noopener">Đăng ký đại lý</a></p>
+<p class="full muted" id="qfmsg" role="status" style="margin:0"></p></form></div></section>
 <section class="sec alt"><div class="wrap narrow"><h2>Câu hỏi thường gặp</h2>{faq}</div></section>"""
     faqld = {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [
         {"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in FAQ]}
     write("dai-ly", page("dai-ly/", "Làm đại lý bánh tráng, mua sỉ từ 30 gói | Sinh Thái Việt",
                          "Chính sách đại lý và giá sỉ bánh tráng trộn Sinh Thái Việt: đại lý chiến lược, đại lý, sỉ từ 30 gói. Sản phẩm ISO 22000:2018. Liên hệ Zalo 0362 771 650.",
                          body, 1, "img/anh/b120.jpg", jsonld=[faqld], crumbs=[("Trang chủ", ""), ("Đại lý & sỉ", "dai-ly/")]))
+
+
+# ---------- XƯỞNG & HỢP TÁC ----------
+def xuong():
+    def fg(im, cap, alt): return f'<figure>{img(im, alt, "../", 600, 450)}<figcaption>{cap}</figcaption></figure>'
+    body = f"""
+<section class="sec pagehead"><div class="wrap"><nav class="bc" aria-label="Breadcrumb"><a href="../">Trang chủ</a> / Xưởng &amp; hợp tác</nav>
+<h1>Xưởng sản xuất &amp; đội ngũ Sinh Thái Việt</h1>
+<p class="lead">Nhìn tận nơi cách chúng tôi chế biến, cân định lượng, đóng gói và gửi hàng đi mỗi ngày.</p></div></section>
+<section class="sec"><div class="wrap"><h2>Chế biến &amp; đóng gói mỗi ngày</h2>
+<p class="muted">Nhân viên mặc đồ bảo hộ, đội mũ, đeo khẩu trang và găng tay khi cân, chia và đóng gói. Nguyên liệu để trên kệ riêng, cân bằng cân điện tử trước khi vào túi.</p>
+<div class="ph3">{fg("img/anh/c03.jpg", "Tổ đóng gói bánh tráng và topping", "Nhân viên đóng gói bánh tráng và topping tại xưởng Sinh Thái Việt")}
+{fg("img/anh/c02.jpg", "Cân chia và đóng túi theo định lượng", "Tổ cân chia sản phẩm bánh tráng tại xưởng Sinh Thái Việt")}
+{fg("img/anh/c01.jpg", "Chia sốt và dán nhãn lọ topping", "Nhân viên chia sốt và dán nhãn tại xưởng Sinh Thái Việt")}</div></div></section>
+<section class="sec cream"><div class="wrap split top">{img("img/anh/c05.jpg", "Sản phẩm Sinh Thái Việt trên kệ siêu thị", "../", 600, 450)}
+<div><h2>Hợp tác thực tế với điểm bán</h2><p>Sản phẩm Sinh Thái Việt hiện có mặt trên kệ tại các điểm bán lẻ, từ bánh tráng hũ nhiều topping tới các túi zip tẩm vị. Nếu bạn quản lý siêu thị, cửa hàng tiện lợi hoặc chuỗi bán lẻ, chúng tôi có tư vấn riêng về danh mục, giá và giao hàng.</p>
+<p><a class="btn" href="../dai-ly/#bao-gia">Nhận báo giá sỉ</a> <a class="btn ghost" href="tel:{HOTLINE}">Gọi {HOTLINE_FMT}</a></p></div></div></section>
+<section class="sec"><div class="wrap split top"><div><h2>Được ghi nhận</h2><p>Hợp tác xã nhận biểu dương tại lễ vinh danh “Thương hiệu nổi tiếng vì sự phát triển kinh tế quốc gia”. Xem chi tiết tại trang <a href="../chung-nhan/">Chứng nhận</a>.</p></div>
+{img("img/anh/c04.jpg", "Hợp tác xã Đầu tư Sinh Thái Việt nhận biểu dương tại lễ vinh danh", "../", 600, 340)}</div></section>
+<section class="cta-band"><div class="wrap"><div><h2>Muốn đến xem xưởng hoặc lấy mẫu?</h2><p>Liên hệ để được tư vấn, nhận bảng giá và hẹn lịch trao đổi trực tiếp.</p></div>
+<p class="cta"><a class="btn y" href="tel:{HOTLINE}">Gọi {HOTLINE_FMT}</a><a class="btn w" href="https://zalo.me/{PHONE}">Zalo {PHONE_FMT}</a></p></div></section>"""
+    write("xuong-san-xuat", page("xuong-san-xuat/", "Xưởng sản xuất & đội ngũ bánh tráng Sinh Thái Việt",
+                                 "Hình ảnh xưởng chế biến, đóng gói bánh tráng trộn và topping của Hợp tác xã Đầu tư Sinh Thái Việt, đạt ISO 22000:2018. Hợp tác siêu thị, đại lý.",
+                                 body, 1, "img/anh/c03.jpg", crumbs=[("Trang chủ", ""), ("Xưởng & hợp tác", "xuong-san-xuat/")]))
+
 
 
 # ---------- CHỨNG NHẬN ----------
@@ -356,7 +410,11 @@ def certs():
 <tr><th>Đăng ký lần đầu</th><td>17/4/2024 (thay đổi lần 1: 15/4/2025)</td></tr>
 <tr><th>Trụ sở</th><td>{ADDR}</td></tr><tr><th>Vốn điều lệ</th><td>1.000.000.000 đồng</td></tr>
 <tr><th>Giám đốc</th><td>Nguyễn Thị Minh Phượng</td></tr><tr><th>Chủ tịch HĐQT</th><td>Ngô Việt Cường</td></tr></table>
-<p><a class="btn ghost" href="../img/cert/dang-ky-hop-tac-xa.jpg" target="_blank" rel="noopener">Xem giấy đăng ký HTX</a></p></div></div></section>"""
+<p><a class="btn ghost" href="../img/cert/dang-ky-hop-tac-xa.jpg" target="_blank" rel="noopener">Xem giấy đăng ký HTX</a></p></div></div></section>
+<section class="sec alt"><div class="wrap"><h2>Biểu dương năm 2026</h2>
+<p class="muted">Hợp tác xã được biểu dương danh hiệu “Sản phẩm dịch vụ tiêu biểu vì sự phát triển kinh tế quốc gia 2026” trong chương trình “Doanh nghiệp vươn mình” do ban tổ chức trao tại lễ biểu dương.</p>
+<div class="split top">{img("img/anh/c06.jpg", "Bằng biểu dương và cúp Thương hiệu nổi tiếng của Hợp tác xã Đầu tư Sinh Thái Việt", "../", 600, 600)}
+{img("img/anh/c04.jpg", "Hợp tác xã nhận biểu dương tại Lễ biểu dương Thương hiệu nổi tiếng vì sự phát triển kinh tế quốc gia", "../", 600, 340)}</div></div></section>"""
     write("chung-nhan", page("chung-nhan/", "Chứng nhận ISO 22000:2018 & giấy đăng ký HTX | Sinh Thái Việt",
                              "Giấy chứng nhận ISO 22000:2018 số W2386F (WCERT) và đăng ký hợp tác xã mã số 4601617683 của Hợp tác xã Đầu tư Sinh Thái Việt, Thái Nguyên.",
                              body, 1, "img/cert/iso22000-giay-chung-nhan.jpg", crumbs=[("Trang chủ", ""), ("Chứng nhận", "chung-nhan/")]))
@@ -414,7 +472,11 @@ details{background:#fff;border:1px solid var(--cream2);border-radius:12px;paddin
 nav{display:none;position:absolute;left:0;right:0;top:66px;background:var(--bg);padding:12px 20px;border-bottom:1px solid var(--cream2);flex-direction:column}nav.open{display:flex}nav a{margin:0;padding:10px 0}.logo-story{flex-direction:column;align-items:flex-start}}
 """
 
-JS = """(function(){var g=document.getElementById('grid');if(!g)return;var q=document.getElementById('q'),cs=g.parentNode.querySelectorAll('.chip'),f='',
+JS = """(function(){var f=document.getElementById('qf');if(f){f.addEventListener('submit',function(e){e.preventDefault();var d=new FormData(f),m=document.getElementById('qfmsg');
+if(!d.get('ten').trim()||!d.get('sdt').trim()){m.textContent='Vui lòng nhập họ tên và số điện thoại.';return}
+var t='YÊU CẦU BÁO GIÁ SỈ\nHọ tên: '+d.get('ten')+'\nSĐT: '+d.get('sdt')+'\nLà: '+d.get('loai')+'\nTỉnh/thành: '+d.get('tinh')+'\nQuan tâm: '+d.get('nd');
+if(navigator.clipboard)navigator.clipboard.writeText(t).catch(function(){});m.textContent='Đã chép nội dung. Dán vào Zalo rồi gửi giúp chúng tôi nhé.';window.open('https://zalo.me/0362771650','_blank','noopener')})}
+})();(function(){var g=document.getElementById('grid');if(!g)return;var q=document.getElementById('q'),cs=g.parentNode.querySelectorAll('.chip'),f='',
 cards=g.querySelectorAll('.card'),em=document.getElementById('empty');function run(){var t=q.value.trim().toLowerCase(),n=0;
 cards.forEach(function(c){var ok=(!f||c.dataset.cat===f)&&(!t||c.dataset.name.indexOf(t)>-1);c.hidden=!ok;if(ok)n++});em.hidden=n>0}
 q.addEventListener('input',run);cs.forEach(function(b){b.addEventListener('click',function(){cs.forEach(function(x){x.classList.remove('on')});b.classList.add('on');f=b.dataset.f;run()})})})();"""
@@ -504,6 +566,10 @@ def _expand(n):
 
 for _p in BT + NVL:
     _p["name"] = _expand(_p["name"])
+from collections import Counter as _C
+_dup = {n for n, c in _C(p["name"] for p in BT).items() if c > 1}
+for _p in BT:
+    if _p["name"] in _dup and _p.get("stt"): _p["name"] += f" (mã {int(_p['stt']):02d})"
 _seen = set()
 for _items, _base, _sl in ((BT, "san-pham", SLUG_BT), (NVL, "nguyen-lieu", SLUG_NVL)):
     for p in _items:
@@ -722,6 +788,16 @@ CSS += """
 """
 
 
+CSS += """
+.callfab{position:fixed;right:16px;bottom:84px;background:#C41E1E;color:#fff;width:56px;height:56px;border-radius:50%;display:grid;place-items:center;font-size:1.5rem;text-decoration:none;box-shadow:0 6px 16px rgba(0,0,0,.3);z-index:60}
+.qf{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px}.qf label{display:flex;flex-direction:column;gap:4px;font-weight:600;font-size:.9rem}.qf .full{grid-column:1/-1}
+.qf input,.qf select,.qf textarea{font:inherit;padding:11px 12px;border:1.5px solid var(--cream2);border-radius:10px;background:#fff}.qf input:focus,.qf select:focus,.qf textarea:focus{outline:2px solid var(--gold);border-color:var(--gold)}
+.qf button.btn{cursor:pointer;font:inherit;font-weight:600}.ticks{padding-left:1.2em}.ticks li{margin:6px 0}
+.perks .box{height:100%}.ph3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.ph3 figure{margin:0;border-radius:16px;overflow:hidden;background:#fff;box-shadow:0 8px 20px rgba(0,0,0,.12)}.ph3 img{width:100%;aspect-ratio:4/3;object-fit:cover}.ph3 figcaption{padding:10px 14px;font-weight:600;font-size:.92rem}
+@media(max-width:700px){.qf{grid-template-columns:1fr}.ph3{grid-template-columns:1fr}}
+"""
+
+
 def to_webp():
     from PIL import Image
     for d in ("img/anh", "img/sp"):
@@ -741,7 +817,7 @@ if __name__ == "__main__":
     open(os.path.join(OUT, "style.css"), "w").write(CSS)
     open(os.path.join(OUT, "app.js"), "w").write(JS)
     to_webp()
-    home(); story(); products(); materials(); dealer(); certs(); contact(); articles()
+    home(); story(); xuong(); products(); materials(); dealer(); certs(); contact(); articles()
     for c in SLUG_BT: cat_page(BT, "san-pham", c, SLUG_BT)
     for c in SLUG_NVL: cat_page(NVL, "nguyen-lieu", c, SLUG_NVL)
     for p in BT: prod_page(p, BT, SLUG_BT)
