@@ -121,7 +121,7 @@ def page(path, title, desc, body, depth=0, og_img="img/anh/b139.jpg", jsonld=Non
 <p>Zalo sỉ: <a href="tel:{PHONE}">{PHONE_FMT}</a></p><p>Hotline: <a href="tel:{HOTLINE}">{HOTLINE_FMT}</a></p></div>
 <div><h3>Khám phá</h3>{"".join(f'<p><a href="{rel}{h}">{t}</a></p>' for h, t in NAV[1:])}</div>
 </div><div class="wrap copy">© {datetime.date.today().year} {NAME}. Mã số hợp tác xã 4601617683.</div></footer>
-<a class="callfab" href="tel:{HOTLINE}" aria-label="Gọi hotline {HOTLINE_FMT}">&#9742;</a><a class="zalo" href="https://zalo.me/{PHONE}" rel="noopener" target="_blank" aria-label="Chat Zalo">Zalo</a>
+<a class="callfab" href="tel:{HOTLINE}" aria-label="Gọi ngay {HOTLINE_FMT}"><span class="ci">&#9742;</span><span class="ct"><b>GỌI NGAY</b><small>{HOTLINE_FMT}</small></span></a><a class="zalo" href="https://zalo.me/{PHONE}" rel="noopener" target="_blank" aria-label="Chat Zalo">Zalo</a>
 <script src="{rel}app.js" defer></script>
 </body></html>"""
 
@@ -194,7 +194,7 @@ def home():
 <p class="eyebrow2">Hợp tác xã Đầu tư Sinh Thái Việt · Thái Nguyên</p>
 <h1>Bánh tráng trộn <em>cay – giòn – đã miệng</em><span class="h1s">Đạt chuẩn ISO 22000:2018</span></h1>
 <p class="lead2">Mở túi là có ngay món ăn vặt đường phố: sợi bánh tráng tẩm vị, khô bò, khô gà, tóp mỡ, hành phi, đậu phộng. Bán lẻ, bán sỉ, cung cấp nguyên liệu mở quán trên toàn quốc.</p>
-<p class="cta"><a class="btn y" href="san-pham/">Chọn vị ngay</a><a class="btn w" href="dai-ly/">Làm đại lý / mua sỉ</a></p>
+<p class="cta"><a class="btn y" href="san-pham/">Chọn vị ngay</a><a class="btn w" href="tel:{HOTLINE}">&#9742; Gọi ngay {HOTLINE_FMT}</a><a class="btn w" href="dai-ly/">Làm đại lý / mua sỉ</a></p>
 <ul class="badges2"><li>ISO 22000:2018</li><li>{len(BT)}+ sản phẩm</li><li>{len(NVL)}+ nguyên liệu sỉ</li><li>Không chất bảo quản</li></ul>
 </div><div class="h2pic">
 {img("img/anh/b139.jpg", "Bánh tráng trộn saté bò ngũ vị Sinh Thái Việt", "", 700, 700, "m", lazy=False)}
@@ -789,7 +789,7 @@ CSS += """
 
 
 CSS += """
-.callfab{position:fixed;right:16px;bottom:84px;background:#C41E1E;color:#fff;width:56px;height:56px;border-radius:50%;display:grid;place-items:center;font-size:1.5rem;text-decoration:none;box-shadow:0 6px 16px rgba(0,0,0,.3);z-index:60}
+.callfab{position:fixed;right:16px;bottom:84px;background:#C41E1E;color:#fff;height:56px;padding:0 20px 0 14px;border-radius:999px;display:flex;align-items:center;gap:10px;text-decoration:none;box-shadow:0 6px 16px rgba(0,0,0,.3);z-index:60;animation:ring 2.5s infinite}.callfab .ci{font-size:1.5rem}.callfab .ct{display:flex;flex-direction:column;line-height:1.15}.callfab b{font-size:.8rem;letter-spacing:.05em}.callfab small{font-size:1rem;font-weight:700}@keyframes ring{0%,100%{box-shadow:0 6px 16px rgba(0,0,0,.3),0 0 0 0 rgba(196,30,30,.5)}50%{box-shadow:0 6px 16px rgba(0,0,0,.3),0 0 0 12px rgba(196,30,30,0)}}@media(prefers-reduced-motion:reduce){.callfab{animation:none}}
 .qf{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px}.qf label{display:flex;flex-direction:column;gap:4px;font-weight:600;font-size:.9rem}.qf .full{grid-column:1/-1}
 .qf input,.qf select,.qf textarea{font:inherit;padding:11px 12px;border:1.5px solid var(--cream2);border-radius:10px;background:#fff}.qf input:focus,.qf select:focus,.qf textarea:focus{outline:2px solid var(--gold);border-color:var(--gold)}
 .qf button.btn{cursor:pointer;font:inherit;font-weight:600}.ticks{padding-left:1.2em}.ticks li{margin:6px 0}
